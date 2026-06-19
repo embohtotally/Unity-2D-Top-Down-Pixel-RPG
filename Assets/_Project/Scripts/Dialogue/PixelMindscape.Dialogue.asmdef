@@ -4,7 +4,10 @@
     "references": [
         "PixelMindscape.Data",
         "PixelMindscape.Core",
-        "Fungus"
+        "Fungus",
+        "PixelMindscape.Battle",
+        "Unity.TextMeshPro",
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

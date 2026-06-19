@@ -14,6 +14,9 @@ namespace PixelMindscape.Battle
 
         public BattleState CurrentState { get; private set; }
         public event System.Action OnTurnOrderChanged;
+        public event System.Action<Combatant> OnTurnStarted;
+
+        private bool isQueuePaused = false;
 
         private List<Combatant> turnQueue = new List<Combatant>();
         private List<Combatant> activeParty = new List<Combatant>();
@@ -44,7 +47,7 @@ namespace PixelMindscape.Battle
             CurrentState = BattleState.Start;
             CalculateTurnOrder();
             CurrentState = BattleState.PlayerTurn; // Ideally we check whose turn it actually is
-            AdvanceTurn();
+            StartCoroutine(AdvanceTurnRoutine());
         }
 
         public void CalculateTurnOrder()
@@ -84,7 +87,7 @@ namespace PixelMindscape.Battle
             }
             else
             {
-                AdvanceTurn();
+                StartCoroutine(AdvanceTurnRoutine());
             }
         }
 
@@ -133,13 +136,16 @@ namespace PixelMindscape.Battle
         public void EndNegotiationPhase(bool success)
         {
             if (success) CheckBattleEndConditions();
-            else AdvanceTurn();
+            else StartCoroutine(AdvanceTurnRoutine());
         }
 
-        private void AdvanceTurn() 
+        public void PauseQueue() { isQueuePaused = true; }
+        public void ResumeQueue() { isQueuePaused = false; }
+
+        private IEnumerator AdvanceTurnRoutine() 
         { 
             CheckBattleEndConditions();
-            if (CurrentState == BattleState.Victory || CurrentState == BattleState.Defeat) return;
+            if (CurrentState == BattleState.Victory || CurrentState == BattleState.Defeat) yield break;
 
             if (turnQueue.Count > 0)
             {
@@ -149,12 +155,15 @@ namespace PixelMindscape.Battle
                 // If the combatant is defeated, skip their turn
                 if (current.IsDefeated)
                 {
-                    AdvanceTurn();
-                    return;
+                    StartCoroutine(AdvanceTurnRoutine());
+                    yield break;
                 }
 
                 turnQueue.Add(current);
                 OnTurnOrderChanged?.Invoke();
+                OnTurnStarted?.Invoke(current);
+
+                while (isQueuePaused) yield return null;
 
                 CurrentState = current.IsPlayerSide ? BattleState.PlayerTurn : BattleState.EnemyTurn;
                 

@@ -10,16 +10,31 @@ public class PlayerMovement : MonoBehaviour
     Vector2 movement;
     Animator animator;
 
+    public bool CutsceneMode { get; set; }
+    private Vector2 overrideMovement;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         rb2D = GetComponent<Rigidbody2D>();
     }
 
+    public void SetOverrideMovement(Vector2 direction)
+    {
+        overrideMovement = direction;
+    }
+
     private void Update()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
+        if (CutsceneMode)
+        {
+            movement = overrideMovement;
+        }
+        else
+        {
+            movement.x = Input.GetAxisRaw("Horizontal");
+            movement.y = Input.GetAxisRaw("Vertical");
+        }
 
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, -111f, 111f), Mathf.Clamp(transform.position.y, -111f, 111f));
 
