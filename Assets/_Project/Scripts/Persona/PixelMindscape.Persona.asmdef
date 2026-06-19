@@ -1,0 +1,17 @@
+{
+    "name": "PixelMindscape.Persona",
+    "rootNamespace": "PixelMindscape.Persona",
+    "references": [
+        "PixelMindscape.Data",
+        "PixelMindscape.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,16 @@
+{
+    "name": "PixelMindscape.Core",
+    "rootNamespace": "PixelMindscape.Core",
+    "references": [
+        "PixelMindscape.Data" 
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
