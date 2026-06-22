@@ -23,7 +23,8 @@ namespace PixelMindscape.Battle
 
         public virtual void TakeDamage(float amount, Element element)
         {
-            if (amount < 0) 
+            bool isHeal = amount < 0;
+            if (isHeal) 
             {
                 CurrentHP = Mathf.Min(CurrentHP - (int)amount, MaxHP);
             }
@@ -34,6 +35,13 @@ namespace PixelMindscape.Battle
                 
                 // DOTween integration for hit animation
                 transform.DOShakePosition(0.5f, 0.5f, 10, 90, false, true);
+            }
+
+            // Spawn DOTween Damage Popup
+            if (BattleManager.Instance != null && BattleManager.Instance.DamagePopupPrefab != null)
+            {
+                var popup = Instantiate(BattleManager.Instance.DamagePopupPrefab, transform.position, Quaternion.identity);
+                popup.Setup((int)amount, isHeal);
             }
         }
 

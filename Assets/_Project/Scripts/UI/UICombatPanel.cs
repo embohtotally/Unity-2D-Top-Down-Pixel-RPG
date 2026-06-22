@@ -12,13 +12,32 @@ namespace PixelMindscape.UI
         [SerializeField] private BattleManager battleManager;
         [SerializeField] private RectTransform panelRect;
         
-        // Placeholders for views
-        // [SerializeField] private TimelineBarView timelineBar;
-        // [SerializeField] private CommandMenuView commandMenu;
+        [SerializeField] private CommandMenuView commandMenu;
+        [SerializeField] private TargetSelectionView targetSelection;
 
         private void OnEnable() 
         {
-            if (battleManager != null) battleManager.OnTurnOrderChanged += HandleTurnOrderChanged;
+            if (battleManager != null) 
+            {
+                battleManager.OnTurnOrderChanged += HandleTurnOrderChanged;
+                battleManager.OnTurnStarted += HandleTurnStarted;
+            }
+
+            if (commandMenu != null)
+            {
+                commandMenu.OnAttackSelected += HandleAttackSelected;
+                // Hook up other actions here in the future
+            }
+
+            if (targetSelection != null)
+            {
+                targetSelection.OnTargetSelected += OnPlayerSelectsAttack;
+                targetSelection.OnCancelled += () => 
+                {
+                    targetSelection.Hide();
+                    commandMenu.Show();
+                };
+            }
             
             // DOTween pop-in animation
             if (panelRect != null)
@@ -30,12 +49,36 @@ namespace PixelMindscape.UI
         
         private void OnDisable() 
         {
-            if (battleManager != null) battleManager.OnTurnOrderChanged -= HandleTurnOrderChanged;
+            if (battleManager != null) 
+            {
+                battleManager.OnTurnOrderChanged -= HandleTurnOrderChanged;
+                battleManager.OnTurnStarted -= HandleTurnStarted;
+            }
         }
 
         private void HandleTurnOrderChanged()
         {
-            // timelineBar.Refresh(battleManager.GetTurnQueueSnapshot());
+            // Update timeline UI
+        }
+
+        private void HandleTurnStarted(Combatant currentCombatant)
+        {
+            if (currentCombatant.IsPlayerSide)
+            {
+                commandMenu?.Show();
+                targetSelection?.Hide();
+            }
+            else
+            {
+                commandMenu?.Hide();
+                targetSelection?.Hide();
+            }
+        }
+
+        private void HandleAttackSelected()
+        {
+            commandMenu.Hide();
+            targetSelection.Show(battleManager.GetActiveEnemies());
         }
 
         public void OnPlayerSelectsAttack(Combatant target)

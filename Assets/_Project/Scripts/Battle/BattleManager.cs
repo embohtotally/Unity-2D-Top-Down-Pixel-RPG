@@ -12,6 +12,9 @@ namespace PixelMindscape.Battle
     {
         public static BattleManager Instance { get; private set; }
 
+        [Header("UI & Effects")]
+        public DamagePopup DamagePopupPrefab;
+
         public BattleState CurrentState { get; private set; }
         public event System.Action OnTurnOrderChanged;
         public event System.Action<Combatant> OnTurnStarted;
@@ -115,6 +118,8 @@ namespace PixelMindscape.Battle
         }
 
         public bool AllEnemiesDown() => activeEnemies.TrueForAll(e => e.IsDown);
+        
+        public List<Combatant> GetActiveEnemies() => activeEnemies;
 
         private void CheckBattleEndConditions()
         {
