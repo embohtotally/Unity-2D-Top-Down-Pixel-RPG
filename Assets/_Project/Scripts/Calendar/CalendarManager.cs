@@ -97,5 +97,24 @@ namespace PixelMindscape.Calendar
             var flags = GameManager.Instance.CurrentSave.storyFlags;
             return e.prerequisiteFlags.TrueForAll(flags.Contains);
         }
+
+        public void PerformActivity(StatTrainingActivity activity)
+        {
+            if (activity == null) return;
+
+            var save = GameManager.Instance.CurrentSave;
+            int currentStat = save.GetSocialStat(activity.statType);
+            save.SetSocialStat(activity.statType, currentStat + activity.pointsGranted);
+
+            // Sync with Fungus via SendMessage to avoid direct assembly coupling
+            if (fungusBridge != null)
+            {
+                fungusBridge.SendMessage("PushStateToFungus", SendMessageOptions.DontRequireReceiver);
+            }
+
+            Debug.Log($"Performed {activity.activityName}. {activity.statType} increased by {activity.pointsGranted}!");
+
+            AdvanceTimeSlot();
+        }
     }
 }

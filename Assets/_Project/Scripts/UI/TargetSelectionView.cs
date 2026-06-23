@@ -1,66 +1,97 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using PixelMindscape.Battle;
 
 namespace PixelMindscape.UI
 {
     public class TargetSelectionView : MonoBehaviour
     {
-        [SerializeField] private Transform buttonContainer;
-        [SerializeField] private GameObject targetButtonPrefab; // Must have Button and TMP_Text
-        [SerializeField] private Button cancelButton;
+        [Header("UI (Optional)")]
+        [SerializeField] private GameObject selectionPanel; // E.g., a panel that says "Select Target!"
+        [SerializeField] private Button cancelButton; // Manual cancel button
 
-        public event System.Action<Combatant> OnTargetSelected;
-        public event System.Action OnCancelled;
+        [Header("Raycast Settings")]
+        [SerializeField] private LayerMask targetLayerMask = ~0; // Layer mask for combatants
 
-        private List<GameObject> activeButtons = new List<GameObject>();
+        private List<Combatant> validTargets;
+        private bool isSelecting = false;
+        private Camera mainCamera;
+        
+        private System.Action<Combatant> onTargetSelectedCallback;
+        private System.Action onCancelledCallback;
 
         private void Start()
         {
-            if (cancelButton != null) cancelButton.onClick.AddListener(() => OnCancelled?.Invoke());
+            mainCamera = Camera.main;
+            if (cancelButton != null) cancelButton.onClick.AddListener(CancelSelection);
         }
 
-        public void Show(List<Combatant> targets)
+        public void Show(List<Combatant> targets, System.Action<Combatant> onSelected, System.Action onCancel = null)
         {
-            gameObject.SetActive(true);
-            ClearButtons();
-
-            foreach (var target in targets)
-            {
-                if (target.IsDefeated) continue; // Skip dead targets
-
-                var btnObj = Instantiate(targetButtonPrefab, buttonContainer);
-                activeButtons.Add(btnObj);
-
-                var button = btnObj.GetComponent<Button>();
-                var text = btnObj.GetComponentInChildren<TMP_Text>();
-
-                if (text != null) text.SetText(target.gameObject.name);
-
-                var currentTarget = target; // capture for closure
-                if (button != null) button.onClick.AddListener(() => 
-                {
-                    OnTargetSelected?.Invoke(currentTarget);
-                    Hide();
-                });
-            }
+            validTargets = targets;
+            onTargetSelectedCallback = onSelected;
+            onCancelledCallback = onCancel;
+            isSelecting = true;
+            if (selectionPanel != null) selectionPanel.SetActive(true);
         }
 
         public void Hide()
         {
-            gameObject.SetActive(false);
-            ClearButtons();
+            isSelecting = false;
+            validTargets = null;
+            onTargetSelectedCallback = null;
+            onCancelledCallback = null;
+            if (selectionPanel != null) selectionPanel.SetActive(false);
         }
 
-        private void ClearButtons()
+        private void Update()
         {
-            foreach (var btn in activeButtons)
+            if (!isSelecting) return;
+
+            // Handle Target Selection (Left Click)
+            if (Input.GetMouseButtonDown(0))
             {
-                Destroy(btn);
+                HandleRaycastSelection();
             }
-            activeButtons.Clear();
+
+            // Handle Cancellation (Right Click)
+            if (Input.GetMouseButtonDown(1))
+            {
+                CancelSelection();
+            }
+        }
+
+        private void HandleRaycastSelection()
+        {
+            if (mainCamera == null) mainCamera = Camera.main;
+
+            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            // Raycast at the mouse position to check for 2D colliders
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, targetLayerMask);
+
+            if (hit.collider != null)
+            {
+                Combatant target = hit.collider.GetComponentInParent<Combatant>();
+                
+                if (target == null)
+                    target = hit.collider.GetComponentInChildren<Combatant>();
+
+                // Check if we hit a combatant, if it's in our valid list, and it's not dead.
+                if (target != null && validTargets != null && validTargets.Contains(target) && !target.IsDefeated)
+                {
+                    var callback = onTargetSelectedCallback;
+                    Hide();
+                    callback?.Invoke(target);
+                }
+            }
+        }
+
+        private void CancelSelection()
+        {
+            var callback = onCancelledCallback;
+            Hide();
+            callback?.Invoke();
         }
     }
 }

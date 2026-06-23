@@ -7,6 +7,9 @@ namespace PixelMindscape.Battle
 {
     public abstract class Combatant : MonoBehaviour
     {
+        [Header("UI Data")]
+        public Sprite TurnPortrait; // Assign an icon for the Turn Order UI
+
         public bool IsPlayerSide;
         public int EffectiveAgility { get; protected set; }
         public bool IsDown { get; protected set; }
@@ -64,7 +67,9 @@ namespace PixelMindscape.Battle
             }
         }
 
-        public virtual void GrantOneMore() { }
+        public bool HasOneMore { get; protected set; }
+        public virtual void GrantOneMore() { HasOneMore = true; }
+        public virtual void ClearOneMore() { HasOneMore = false; }
         public virtual void ApplyBatonPassBuff(int stack) { }
         public virtual void ApplyGuardStance() { }
         public virtual void EquipActivePersona(PersonaRuntimeState persona) { }
@@ -72,5 +77,10 @@ namespace PixelMindscape.Battle
         public abstract Affinity GetAffinity(Element element);
         public abstract int GetAttackStatFor(Element element);
         public abstract int GetDefenseStatFor(Element element);
+
+        public virtual System.Collections.Generic.List<SkillData> GetAvailableSkills()
+        {
+            return new System.Collections.Generic.List<SkillData>();
+        }
     }
 }

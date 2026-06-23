@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using PixelMindscape.Data;
 using PixelMindscape.Core;
 
@@ -7,7 +8,8 @@ namespace PixelMindscape.Battle
     public abstract class BattleAction
     {
         public Combatant Source;
-        public List<Combatant> Targets;
+        // Initialize to empty list to prevent null-reference exceptions (e.g., in GuardAction)
+        public List<Combatant> Targets = new List<Combatant>(); 
 
         /// Returns true if the action resulted in a weakness hit
         public abstract bool Execute(BattleManager battle);
@@ -20,9 +22,15 @@ namespace PixelMindscape.Battle
             bool anyWeak = false;
             foreach (var target in Targets)
             {
+                if (target == null || target.IsDefeated) continue;
+
                 var result = DamageCalculator.CalculateDamage(Source, target, null); 
                 target.TakeDamage(result.finalDamage, Element.Physical);
-                if (result.affinity == Affinity.Weak) { target.SetDown(true); anyWeak = true; }
+                if (result.affinity == Affinity.Weak) 
+                { 
+                    target.SetDown(true); 
+                    anyWeak = true; 
+                }
             }
             return anyWeak;
         }
@@ -34,15 +42,21 @@ namespace PixelMindscape.Battle
 
         public override bool Execute(BattleManager battle)
         {
-            if (Source.CurrentSP < skill.spCost) return false; 
+            if (skill == null || Source.CurrentSP < skill.spCost) return false; 
             Source.SpendSP(skill.spCost);
 
             bool anyWeak = false;
             foreach (var target in Targets)
             {
+                if (target == null || target.IsDefeated) continue;
+
                 var result = DamageCalculator.CalculateDamage(Source, target, skill);
                 target.TakeDamage(result.finalDamage, skill.element);
-                if (result.affinity == Affinity.Weak) { target.SetDown(true); anyWeak = true; }
+                if (result.affinity == Affinity.Weak) 
+                { 
+                    target.SetDown(true); 
+                    anyWeak = true; 
+                }
             }
             return anyWeak;
         }
@@ -63,8 +77,11 @@ namespace PixelMindscape.Battle
 
         public override bool Execute(BattleManager battle)
         {
-            battle.PerformBatonPass(Source, PassTo);
-            return false;
+            if (PassTo != null && !PassTo.IsDefeated)
+            {
+                battle.PerformBatonPass(Source, PassTo);
+            }
+            return false; // Baton pass itself doesn't hit a weakness
         }
     }
 
@@ -75,6 +92,27 @@ namespace PixelMindscape.Battle
         public override bool Execute(BattleManager battle)
         {
             Source.EquipActivePersona(NewPersona); 
+            
+            if (BattleCinematicManager.Instance != null)
+            {
+                BattleCinematicManager.Instance.PlayPersonaSummonFlash(Source);
+            }
+
+            return false;
+        }
+    }
+
+    public class ItemAction : BattleAction
+    {
+        public ItemData Item;
+
+        public override bool Execute(BattleManager battle)
+        {
+            if (Item == null) return false;
+
+            // Placeholder: Implement item effects based on ItemData (healing, reviving, etc.)
+            // e.g. target.TakeDamage(-Item.healAmount, Element.None);
+            Debug.Log($"{Source.gameObject.name} used {Item.displayName}!");
             return false;
         }
     }
