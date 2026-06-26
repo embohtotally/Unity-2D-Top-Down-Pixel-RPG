@@ -1,0 +1,897 @@
+fileFormatVersion: 2
+guid: cadf22cb298aec24f8afef499acaacba
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4272005423977665666
+    second: c00b_08evade_0
+  - first:
+      213: 5399477112483755654
+    second: c00b_08evade_1
+  - first:
+      213: -9090866653348147702
+    second: c00b_08evade_2
+  - first:
+      213: -443490432020041944
+    second: c00b_08evade_3
+  - first:
+      213: 6123778214554995129
+    second: c00b_08evade_4
+  - first:
+      213: -4375669993391834220
+    second: c00b_08evade_5
+  - first:
+      213: -3714902502365342042
+    second: c00b_08evade_6
+  - first:
+      213: 2929809652338569098
+    second: c00b_08evade_7
+  - first:
+      213: -7124241303516244099
+    second: c00b_08evade_8
+  - first:
+      213: -8163539992353283697
+    second: c00b_08evade_9
+  - first:
+      213: 4672108131061706005
+    second: c00b_08evade_10
+  - first:
+      213: -5619466878364487435
+    second: c00b_08evade_11
+  - first:
+      213: -6454097936843216826
+    second: c00b_08evade_12
+  - first:
+      213: -8803366345425774974
+    second: c00b_08evade_13
+  - first:
+      213: 6750102149218179976
+    second: c00b_08evade_14
+  - first:
+      213: 1885151308101653102
+    second: c00b_08evade_15
+  - first:
+      213: 5579088941398561265
+    second: c00b_08evade_16
+  - first:
+      213: -1278253683170459546
+    second: c00b_08evade_17
+  - first:
+      213: -1795317086236649470
+    second: c00b_08evade_18
+  - first:
+      213: -6563819143464239621
+    second: c00b_08evade_19
+  - first:
+      213: -1844486052098643851
+    second: c00b_08evade_20
+  - first:
+      213: 7854973773893645094
+    second: c00b_08evade_21
+  - first:
+      213: 904727266857035891
+    second: c00b_08evade_22
+  - first:
+      213: 3103929399377165840
+    second: c00b_08evade_23
+  - first:
+      213: 9117966746178510544
+    second: c00b_08evade_24
+  - first:
+      213: -196935103814947241
+    second: c00b_08evade_25
+  - first:
+      213: -6084484891456148634
+    second: c00b_08evade_26
+  - first:
+      213: -479455302978220657
+    second: c00b_08evade_27
+  - first:
+      213: -2340513328234734071
+    second: c00b_08evade_28
+  - first:
+      213: -7010805970372016432
+    second: c00b_08evade_29
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: c00b_08evade_0
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 1531
+        width: 294
+        height: 271
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2841bbe8c46394b30800000000000000
+      internalID: 4272005423977665666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_1
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 1531
+        width: 299
+        height: 274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 686327e73dbceea40800000000000000
+      internalID: 5399477112483755654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_2
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 1532
+        width: 307
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0e4dbab1f0c6d180800000000000000
+      internalID: -9090866653348147702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_3
+      rect:
+        serializedVersion: 2
+        x: 1485
+        y: 1533
+        width: 309
+        height: 295
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82f29224dc768d9f0800000000000000
+      internalID: -443490432020041944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_4
+      rect:
+        serializedVersion: 2
+        x: 1983
+        y: 1578
+        width: 303
+        height: 266
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b983d947d70cf450800000000000000
+      internalID: 6123778214554995129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_5
+      rect:
+        serializedVersion: 2
+        x: 2098
+        y: 1534
+        width: 171
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49b3b85035f7643c0800000000000000
+      internalID: -4375669993391834220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_6
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 1107
+        width: 295
+        height: 271
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a6dd434bd3027cc0800000000000000
+      internalID: -3714902502365342042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_7
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 1112
+        width: 279
+        height: 274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8fa6232b56c8a820800000000000000
+      internalID: 2929809652338569098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_8
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 1069
+        width: 63
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d779fb1c74c912d90800000000000000
+      internalID: -7124241303516244099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_9
+      rect:
+        serializedVersion: 2
+        x: 1085
+        y: 1114
+        width: 270
+        height: 275
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f81661611a745be80800000000000000
+      internalID: -8163539992353283697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_10
+      rect:
+        serializedVersion: 2
+        x: 1101
+        y: 1072
+        width: 68
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51da5206799a6d040800000000000000
+      internalID: 4672108131061706005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_11
+      rect:
+        serializedVersion: 2
+        x: 1559
+        y: 1110
+        width: 282
+        height: 275
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f0f208b5a4a302b0800000000000000
+      internalID: -5619466878364487435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_12
+      rect:
+        serializedVersion: 2
+        x: 1574
+        y: 1074
+        width: 71
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 648e0e82f107e66a0800000000000000
+      internalID: -6454097936843216826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_13
+      rect:
+        serializedVersion: 2
+        x: 2040
+        y: 1099
+        width: 301
+        height: 271
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 286944973f824d580800000000000000
+      internalID: -8803366345425774974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_14
+      rect:
+        serializedVersion: 2
+        x: 2052
+        y: 1075
+        width: 71
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88b10c1242e2dad50800000000000000
+      internalID: 6750102149218179976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_15
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 1067
+        width: 57
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6213437027692a10800000000000000
+      internalID: 1885151308101653102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_16
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 1054
+        width: 125
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f11f5a35d7ec6d40800000000000000
+      internalID: 5579088941398561265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_17
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 1055
+        width: 121
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6604ac13c0bb24ee0800000000000000
+      internalID: -1278253683170459546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_18
+      rect:
+        serializedVersion: 2
+        x: 1206
+        y: 1055
+        width: 119
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 208dcaf3f90c517e0800000000000000
+      internalID: -1795317086236649470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_19
+      rect:
+        serializedVersion: 2
+        x: 1690
+        y: 1055
+        width: 122
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfdb7eff341a8e4a0800000000000000
+      internalID: -6563819143464239621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_20
+      rect:
+        serializedVersion: 2
+        x: 2179
+        y: 1054
+        width: 129
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5786f7745b11766e0800000000000000
+      internalID: -1844486052098643851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_21
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 595
+        width: 71
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 623b0f8a709720d60800000000000000
+      internalID: 7854973773893645094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_22
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 572
+        width: 307
+        height: 295
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 378af9fd7ac3e8c00800000000000000
+      internalID: 904727266857035891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_23
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 571
+        width: 322
+        height: 279
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01e74c9e75f531b20800000000000000
+      internalID: 3103929399377165840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_24
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 567
+        width: 325
+        height: 276
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0de5bc35276898e70800000000000000
+      internalID: 9117966746178510544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_25
+      rect:
+        serializedVersion: 2
+        x: 1572
+        y: 559
+        width: 326
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75e2e450198544df0800000000000000
+      internalID: -196935103814947241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_26
+      rect:
+        serializedVersion: 2
+        x: 2052
+        y: 552
+        width: 324
+        height: 290
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66b668b6a319f8ba0800000000000000
+      internalID: -6084484891456148634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_27
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 68
+        width: 333
+        height: 294
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8d4e4431f1a859f0800000000000000
+      internalID: -479455302978220657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_28
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 65
+        width: 339
+        height: 297
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90e508e4783d48fd0800000000000000
+      internalID: -2340513328234734071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_08evade_29
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 91
+        width: 322
+        height: 271
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d6c9c26d1d94be90800000000000000
+      internalID: -7010805970372016432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      c00b_08evade_0: 4272005423977665666
+      c00b_08evade_1: 5399477112483755654
+      c00b_08evade_10: 4672108131061706005
+      c00b_08evade_11: -5619466878364487435
+      c00b_08evade_12: -6454097936843216826
+      c00b_08evade_13: -8803366345425774974
+      c00b_08evade_14: 6750102149218179976
+      c00b_08evade_15: 1885151308101653102
+      c00b_08evade_16: 5579088941398561265
+      c00b_08evade_17: -1278253683170459546
+      c00b_08evade_18: -1795317086236649470
+      c00b_08evade_19: -6563819143464239621
+      c00b_08evade_2: -9090866653348147702
+      c00b_08evade_20: -1844486052098643851
+      c00b_08evade_21: 7854973773893645094
+      c00b_08evade_22: 904727266857035891
+      c00b_08evade_23: 3103929399377165840
+      c00b_08evade_24: 9117966746178510544
+      c00b_08evade_25: -196935103814947241
+      c00b_08evade_26: -6084484891456148634
+      c00b_08evade_27: -479455302978220657
+      c00b_08evade_28: -2340513328234734071
+      c00b_08evade_29: -7010805970372016432
+      c00b_08evade_3: -443490432020041944
+      c00b_08evade_4: 6123778214554995129
+      c00b_08evade_5: -4375669993391834220
+      c00b_08evade_6: -3714902502365342042
+      c00b_08evade_7: 2929809652338569098
+      c00b_08evade_8: -7124241303516244099
+      c00b_08evade_9: -8163539992353283697
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

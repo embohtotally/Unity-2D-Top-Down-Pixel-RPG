@@ -1,0 +1,429 @@
+fileFormatVersion: 2
+guid: c1fa4b8c4e829684eae5ce8c1a06c39a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5475598709136722757
+    second: c00b_07damage_0
+  - first:
+      213: 5463375434539420236
+    second: c00b_07damage_1
+  - first:
+      213: -5916828047742499722
+    second: c00b_07damage_2
+  - first:
+      213: 8805860737382786350
+    second: c00b_07damage_3
+  - first:
+      213: 1021330868116487922
+    second: c00b_07damage_4
+  - first:
+      213: 503900618841408878
+    second: c00b_07damage_5
+  - first:
+      213: 6406782293549628326
+    second: c00b_07damage_6
+  - first:
+      213: -1485034033166129402
+    second: c00b_07damage_7
+  - first:
+      213: -6966908714305614050
+    second: c00b_07damage_8
+  - first:
+      213: -1734141914014365290
+    second: c00b_07damage_9
+  - first:
+      213: -2828115916060315505
+    second: c00b_07damage_10
+  - first:
+      213: 5630578424370603259
+    second: c00b_07damage_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: c00b_07damage_0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 1056
+        width: 271
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54b8ea6d30c3dfb40800000000000000
+      internalID: 5475598709136722757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_1
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 1061
+        width: 284
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4a4152f20fc1db40800000000000000
+      internalID: 5463375434539420236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_2
+      rect:
+        serializedVersion: 2
+        x: 1018
+        y: 1061
+        width: 295
+        height: 261
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6748d314d3433eda0800000000000000
+      internalID: -5916828047742499722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_3
+      rect:
+        serializedVersion: 2
+        x: 1495
+        y: 1061
+        width: 328
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e25a2496fa3b43a70800000000000000
+      internalID: 8805860737382786350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_4
+      rect:
+        serializedVersion: 2
+        x: 1973
+        y: 1061
+        width: 357
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fe7938630f7c2e00800000000000000
+      internalID: 1021330868116487922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_5
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 581
+        width: 374
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e65442c61f63ef600800000000000000
+      internalID: 503900618841408878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_6
+      rect:
+        serializedVersion: 2
+        x: 546
+        y: 581
+        width: 381
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6abb9482d8679e850800000000000000
+      internalID: 6406782293549628326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_7
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 580
+        width: 381
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60764c53a69146be0800000000000000
+      internalID: -1485034033166129402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_8
+      rect:
+        serializedVersion: 2
+        x: 1515
+        y: 580
+        width: 381
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1f8d35cf61905f90800000000000000
+      internalID: -6966908714305614050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_9
+      rect:
+        serializedVersion: 2
+        x: 1995
+        y: 580
+        width: 381
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 699ce09fd171fe7e0800000000000000
+      internalID: -1734141914014365290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_10
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 100
+        width: 381
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f80b89fee8380c8d0800000000000000
+      internalID: -2828115916060315505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00b_07damage_11
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 100
+        width: 381
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf4a690be35d32e40800000000000000
+      internalID: 5630578424370603259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      c00b_07damage_0: 5475598709136722757
+      c00b_07damage_1: 5463375434539420236
+      c00b_07damage_10: -2828115916060315505
+      c00b_07damage_11: 5630578424370603259
+      c00b_07damage_2: -5916828047742499722
+      c00b_07damage_3: 8805860737382786350
+      c00b_07damage_4: 1021330868116487922
+      c00b_07damage_5: 503900618841408878
+      c00b_07damage_6: 6406782293549628326
+      c00b_07damage_7: -1485034033166129402
+      c00b_07damage_8: -6966908714305614050
+      c00b_07damage_9: -1734141914014365290
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -24,6 +24,45 @@ namespace PixelMindscape.Battle
         public int MaxSP { get; protected set; }
         public int BaseAttackPower { get; protected set; }
 
+        protected Animator animator;
+        protected CombatantVFXHandler vfxHandler;
+
+        protected virtual void Start()
+        {
+            animator = GetComponentInChildren<Animator>();
+            vfxHandler = GetComponentInChildren<CombatantVFXHandler>();
+        }
+
+        public virtual void PlayAttackAnimation()
+        {
+            if (animator != null) animator.SetTrigger("Attack");
+            if (vfxHandler != null) vfxHandler.PlayAttackVFX();
+        }
+
+        public virtual void PlayCastAnimation()
+        {
+            if (animator != null) animator.SetTrigger("Cast");
+        }
+
+        public virtual void PlayGuardAnimation()
+        {
+            if (animator != null) animator.SetTrigger("Guard");
+            if (vfxHandler != null) vfxHandler.PlayGuardVFX();
+        }
+
+        public virtual void PlayBatonPassVFX()
+        {
+            if (vfxHandler != null) vfxHandler.PlayBatonPassVFX();
+        }
+
+        public virtual void PlaySkillVFX(GameObject vfxPrefab)
+        {
+            if (vfxHandler != null && vfxPrefab != null)
+            {
+                vfxHandler.PlayVFX(vfxPrefab);
+            }
+        }
+
         public virtual void TakeDamage(float amount, Element element)
         {
             bool isHeal = amount < 0;
@@ -36,6 +75,8 @@ namespace PixelMindscape.Battle
                 CurrentHP = Mathf.Max(CurrentHP - (int)amount, 0);
                 if (CurrentHP <= 0) IsDefeated = true;
                 
+                if (animator != null) animator.SetTrigger("TakeDamage");
+                if (vfxHandler != null) vfxHandler.PlayHitVFX();
                 // DOTween integration for hit animation
                 transform.DOShakePosition(0.5f, 0.5f, 10, 90, false, true);
             }
@@ -56,6 +97,8 @@ namespace PixelMindscape.Battle
         public virtual void SetDown(bool state)
         {
             IsDown = state;
+            if (animator != null) animator.SetBool("IsDown", state);
+
             if (state)
             {
                 // DOTween integration for knockdown

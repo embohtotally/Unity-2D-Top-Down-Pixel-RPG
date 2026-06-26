@@ -133,10 +133,9 @@ namespace PixelMindscape.Battle
 
                 bool isBatonPass = action is BatonPassAction;
                 
-                bool wasWeaknessHit = action.Execute(this);
-                
-                // Wait for animations (e.g. DOTween)
-                yield return new WaitForSeconds(1.0f);
+                // Wait for choreographed action coroutine to complete
+                yield return StartCoroutine(action.Execute(this));
+                bool wasWeaknessHit = action.WasWeaknessHit;
 
                 // Check end conditions after action
                 CheckBattleEndConditions();

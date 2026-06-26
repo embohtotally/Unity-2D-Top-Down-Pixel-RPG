@@ -1,0 +1,481 @@
+fileFormatVersion: 2
+guid: 93c2b9468b7216447bc888c1ff7be285
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3152715225527640602
+    second: c00a_06guard_0
+  - first:
+      213: -2261128337295189721
+    second: c00a_06guard_1
+  - first:
+      213: 2950956784019316971
+    second: c00a_06guard_2
+  - first:
+      213: 2444110967355594757
+    second: c00a_06guard_3
+  - first:
+      213: 644018053456211274
+    second: c00a_06guard_4
+  - first:
+      213: 8864633495395189860
+    second: c00a_06guard_5
+  - first:
+      213: 4447385327322574041
+    second: c00a_06guard_6
+  - first:
+      213: 6911157583475779057
+    second: c00a_06guard_7
+  - first:
+      213: -10022876803722713
+    second: c00a_06guard_8
+  - first:
+      213: 2778743492294603643
+    second: c00a_06guard_9
+  - first:
+      213: 4326069747482062506
+    second: c00a_06guard_10
+  - first:
+      213: -3671126662412866741
+    second: c00a_06guard_11
+  - first:
+      213: 1823701288698015251
+    second: c00a_06guard_12
+  - first:
+      213: 4588334140088189952
+    second: c00a_06guard_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: c00a_06guard_0
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 1062
+        width: 205
+        height: 264
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ed9578c43e4f34d0800000000000000
+      internalID: -3152715225527640602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_1
+      rect:
+        serializedVersion: 2
+        x: 614
+        y: 1062
+        width: 203
+        height: 263
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72953f7d1cbde90e0800000000000000
+      internalID: -2261128337295189721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_2
+      rect:
+        serializedVersion: 2
+        x: 1096
+        y: 1062
+        width: 202
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be0200b6f87e3f820800000000000000
+      internalID: 2950956784019316971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_3
+      rect:
+        serializedVersion: 2
+        x: 1577
+        y: 1062
+        width: 202
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 508ddd0b9f93be120800000000000000
+      internalID: 2444110967355594757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_4
+      rect:
+        serializedVersion: 2
+        x: 2058
+        y: 1062
+        width: 201
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4d2239e10300f800800000000000000
+      internalID: 644018053456211274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_5
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 582
+        width: 200
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4644f0d7231850b70800000000000000
+      internalID: 8864633495395189860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_6
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 582
+        width: 200
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dca856546948bd30800000000000000
+      internalID: 4447385327322574041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_7
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 582
+        width: 201
+        height: 263
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f522dd843d59ef50800000000000000
+      internalID: 6911157583475779057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_8
+      rect:
+        serializedVersion: 2
+        x: 1580
+        y: 582
+        width: 200
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7229c742f346cdff0800000000000000
+      internalID: -10022876803722713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_9
+      rect:
+        serializedVersion: 2
+        x: 2059
+        y: 582
+        width: 200
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b73f52cdb74109620800000000000000
+      internalID: 2778743492294603643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_10
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 102
+        width: 202
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aae6b3cc389490c30800000000000000
+      internalID: 4326069747482062506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_11
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 102
+        width: 201
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4b6a6140c98d0dc0800000000000000
+      internalID: -3671126662412866741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_12
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 102
+        width: 202
+        height: 263
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31e6441e8a61f4910800000000000000
+      internalID: 1823701288698015251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: c00a_06guard_13
+      rect:
+        serializedVersion: 2
+        x: 1573
+        y: 102
+        width: 202
+        height: 264
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00401c227990daf30800000000000000
+      internalID: 4588334140088189952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      c00a_06guard_0: -3152715225527640602
+      c00a_06guard_1: -2261128337295189721
+      c00a_06guard_10: 4326069747482062506
+      c00a_06guard_11: -3671126662412866741
+      c00a_06guard_12: 1823701288698015251
+      c00a_06guard_13: 4588334140088189952
+      c00a_06guard_2: 2950956784019316971
+      c00a_06guard_3: 2444110967355594757
+      c00a_06guard_4: 644018053456211274
+      c00a_06guard_5: 8864633495395189860
+      c00a_06guard_6: 4447385327322574041
+      c00a_06guard_7: 6911157583475779057
+      c00a_06guard_8: -10022876803722713
+      c00a_06guard_9: 2778743492294603643
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
