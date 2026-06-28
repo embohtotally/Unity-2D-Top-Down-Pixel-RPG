@@ -31,17 +31,52 @@ namespace PixelMindscape.UI
 
             ClearButtons();
 
-            if (items == null) return;
+            if (items == null || items.Count == 0)
+            {
+                Debug.LogWarning("[ItemSelectionView] Show called with 0 items! Ensure the UICombatPanel has items assigned to 'Available Items' in the Inspector.");
+                return;
+            }
+
+            Debug.Log($"[ItemSelectionView] Spawning buttons for {items.Count} items...");
+
+            Transform actualContainer = buttonContainer != null ? buttonContainer : (selectionPanel != null ? selectionPanel.transform : transform);
 
             foreach (var item in items)
             {
-                var btnObj = Instantiate(itemButtonPrefab, buttonContainer);
+                GameObject btnObj = null;
+                if (itemButtonPrefab != null)
+                {
+                    btnObj = Instantiate(itemButtonPrefab, actualContainer);
+                }
+                else
+                {
+                    Debug.LogWarning("[ItemSelectionView] ItemButtonPrefab is not assigned in the Inspector! Generating a default UI button dynamically.");
+                    btnObj = new GameObject($"Btn_{item.itemId}");
+                    btnObj.transform.SetParent(actualContainer, false);
+                    var rect = btnObj.AddComponent<RectTransform>();
+                    rect.sizeDelta = new Vector2(400, 60);
+                    var img = btnObj.AddComponent<Image>();
+                    img.color = new Color32(30, 60, 90, 240); // sleek dark blue for items
+                    btnObj.AddComponent<Button>();
+
+                    var textObj = new GameObject("Text");
+                    textObj.transform.SetParent(btnObj.transform, false);
+                    var textRect = textObj.AddComponent<RectTransform>();
+                    textRect.anchorMin = Vector2.zero;
+                    textRect.anchorMax = Vector2.one;
+                    textRect.sizeDelta = Vector2.zero;
+                    var tmp = textObj.AddComponent<TextMeshProUGUI>();
+                    tmp.fontSize = 24;
+                    tmp.alignment = TextAlignmentOptions.Center;
+                }
+
                 activeButtons.Add(btnObj);
 
                 var button = btnObj.GetComponent<Button>();
                 var text = btnObj.GetComponentInChildren<TMP_Text>();
 
-                if (text != null) text.SetText(item.displayName);
+                string desc = item.reviveTarget > 0 ? $"Revives {(item.reviveTarget == 2 ? "all allies" : "an ally")}" : (item.healAmount > 0 ? $"Restores {item.healAmount} HP" : "Consumable Item");
+                if (text != null) text.SetText($"{item.displayName} - {desc}");
 
                 var currentItem = item;
                 if (button != null) button.onClick.AddListener(() => 

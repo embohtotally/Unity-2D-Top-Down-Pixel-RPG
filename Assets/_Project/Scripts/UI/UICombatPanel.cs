@@ -196,6 +196,9 @@ namespace PixelMindscape.UI
             }
         }
 
+        [Header("Inventory Data")]
+        [SerializeField] private List<ItemData> availableItems = new List<ItemData>();
+
         private void HandleItemSelected()
         {
             if (isInputLocked) return;
@@ -203,8 +206,9 @@ namespace PixelMindscape.UI
             if (itemSelection != null)
             {
                 SwitchState(CombatUIState.ItemSelect);
-                // Placeholder: Pass empty list or actual inventory items
-                itemSelection.Show(new List<ItemData>(), OnPlayerSelectsItem, () => 
+                var items = availableItems != null ? availableItems : new List<ItemData>();
+                Debug.Log($"[UICombatPanel] Opening Item menu with {items.Count} items.");
+                itemSelection.Show(items, OnPlayerSelectsItem, () => 
                 {
                     SwitchState(CombatUIState.CommandSelect);
                 });
