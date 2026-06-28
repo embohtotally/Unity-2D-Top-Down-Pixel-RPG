@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using PixelMindscape.Battle;
 
 namespace PixelMindscape.UI
@@ -64,6 +65,32 @@ namespace PixelMindscape.UI
 
         private void HandleRaycastSelection()
         {
+            // 1. FIRST check Canvas UI Raycast (if enemies exist on or are tracked via the Canvas UI)
+            if (EventSystem.current != null)
+            {
+                PointerEventData eventData = new PointerEventData(EventSystem.current)
+                {
+                    position = Input.mousePosition
+                };
+                List<RaycastResult> results = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(eventData, results);
+
+                foreach (RaycastResult result in results)
+                {
+                    Combatant uiTarget = result.gameObject.GetComponentInParent<Combatant>();
+                    if (uiTarget == null) uiTarget = result.gameObject.GetComponentInChildren<Combatant>();
+
+                    if (uiTarget != null && validTargets != null && validTargets.Contains(uiTarget) && !uiTarget.IsDefeated)
+                    {
+                        var callback = onTargetSelectedCallback;
+                        Hide();
+                        callback?.Invoke(uiTarget);
+                        return; // Successfully selected via Canvas UI Raycast
+                    }
+                }
+            }
+
+            // 2. SECOND check Physics2D Raycast (if enemies are in the 2D World Space)
             if (mainCamera == null) mainCamera = Camera.main;
 
             Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);

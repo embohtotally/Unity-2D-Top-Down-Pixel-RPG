@@ -158,8 +158,8 @@ namespace PixelMindscape.UI
             if (skillSelection != null)
             {
                 SwitchState(CombatUIState.SkillSelect);
-                // Placeholder: Pass empty list or actual skills from combatant
-                skillSelection.Show(new List<SkillData>(), OnPlayerSelectsSkill, () => 
+                var skills = battleManager.ActiveCombatant != null ? battleManager.ActiveCombatant.GetAvailableSkills() : new List<SkillData>();
+                skillSelection.Show(skills, OnPlayerSelectsSkill, () => 
                 {
                     SwitchState(CombatUIState.CommandSelect);
                 });
@@ -191,8 +191,31 @@ namespace PixelMindscape.UI
 
         private void HandleBatonPassSelected()
         {
-            if (isInputLocked) return;
-            Debug.LogWarning("Baton Pass UI is not fully implemented. Needs ally targeting.");
+            if (isInputLocked || battleManager.ActiveCombatant == null) return;
+            
+            SwitchState(CombatUIState.TargetSelect);
+            var validTargets = battleManager.GetActiveParty();
+            
+            targetSelection.Show(validTargets, (target) => 
+            {
+                if (target == battleManager.ActiveCombatant)
+                {
+                    Debug.LogWarning("Cannot Baton Pass to yourself!");
+                    SwitchState(CombatUIState.CommandSelect);
+                    return;
+                }
+                isInputLocked = true;
+                SwitchState(CombatUIState.Idle);
+                battleManager.SubmitAction(new BatonPassAction 
+                { 
+                    Source = battleManager.ActiveCombatant, 
+                    PassTo = target 
+                });
+            }, 
+            () => 
+            {
+                SwitchState(CombatUIState.CommandSelect);
+            });
         }
 
         private void HandleSwitchPersonaSelected()
@@ -219,14 +242,22 @@ namespace PixelMindscape.UI
             if (isInputLocked || battleManager.ActiveCombatant == null) return;
             
             SwitchState(CombatUIState.TargetSelect);
-            targetSelection.Show(battleManager.GetActiveEnemies(), (target) => 
+            
+            bool targetsAllies = skill.targetScope == TargetScope.SingleAlly || skill.targetScope == TargetScope.AllAllies || skill.targetScope == TargetScope.Self;
+            var validTargets = targetsAllies ? battleManager.GetActiveParty() : battleManager.GetActiveEnemies();
+
+            targetSelection.Show(validTargets, (target) => 
             {
                 isInputLocked = true;
                 SwitchState(CombatUIState.Idle);
+                
+                bool isAllTarget = skill.targetScope == TargetScope.AllEnemies || skill.targetScope == TargetScope.AllAllies;
+                var selectedTargets = isAllTarget ? validTargets : new List<Combatant> { target };
+
                 battleManager.SubmitAction(new SkillAction 
                 { 
                     Source = battleManager.ActiveCombatant, 
-                    Targets = new List<Combatant> { target },
+                    Targets = selectedTargets,
                     skill = skill
                 });
             }, 
@@ -241,14 +272,19 @@ namespace PixelMindscape.UI
             if (isInputLocked || battleManager.ActiveCombatant == null) return;
             
             SwitchState(CombatUIState.TargetSelect);
-            targetSelection.Show(battleManager.GetActiveEnemies(), (target) => 
+            var validTargets = battleManager.GetActiveParty();
+
+            targetSelection.Show(validTargets, (target) => 
             {
                 isInputLocked = true;
                 SwitchState(CombatUIState.Idle);
+                
+                var selectedTargets = item.reviveTarget == 2 ? validTargets : new List<Combatant> { target };
+
                 battleManager.SubmitAction(new ItemAction 
                 { 
                     Source = battleManager.ActiveCombatant, 
-                    Targets = new List<Combatant> { target },
+                    Targets = selectedTargets,
                     Item = item
                 });
             }, 

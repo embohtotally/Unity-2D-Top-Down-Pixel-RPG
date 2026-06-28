@@ -55,12 +55,29 @@ namespace PixelMindscape.Battle
             if (GameManager.Instance != null)
                 GameManager.Instance.Battle = this;
 
+            Debug.Log($"[BattleManager] Start: autoStartBattle={autoStartBattle}, heroesContainer assigned={(heroesContainer != null)}, enemiesContainer assigned={(enemiesContainer != null)}");
+
             // Auto-start for testing purposes
-            if (autoStartBattle && heroesContainer != null && enemiesContainer != null)
+            if (autoStartBattle)
             {
-                var party = new List<Combatant>(heroesContainer.GetComponentsInChildren<Combatant>());
-                var enemies = new List<Combatant>(enemiesContainer.GetComponentsInChildren<Combatant>());
-                StartBattle(party, enemies);
+                if (heroesContainer != null && enemiesContainer != null)
+                {
+                    var party = new List<Combatant>(heroesContainer.GetComponentsInChildren<Combatant>(true));
+                    var enemies = new List<Combatant>(enemiesContainer.GetComponentsInChildren<Combatant>(true));
+                    
+                    Debug.Log($"[BattleManager] Auto-Start: Found {party.Count} heroes in {heroesContainer.name}. Found {enemies.Count} enemies in {enemiesContainer.name}.");
+                    
+                    foreach (var enemy in enemies)
+                    {
+                        Debug.Log($"[BattleManager] Enemy detected in container: {enemy.gameObject.name} (Active in hierarchy: {enemy.gameObject.activeInHierarchy})");
+                    }
+
+                    StartBattle(party, enemies);
+                }
+                else
+                {
+                    Debug.LogWarning("[BattleManager] Auto-Start is enabled, but heroesContainer or enemiesContainer is not assigned in the Inspector!");
+                }
             }
         }
 
@@ -68,6 +85,25 @@ namespace PixelMindscape.Battle
         {
             activeParty = party;
             activeEnemies = enemies;
+
+            // Ensure all combatants are active in the hierarchy and explicitly initialize their stats
+            foreach (var p in activeParty)
+            {
+                if (p != null)
+                {
+                    p.gameObject.SetActive(true);
+                    p.InitializeStats();
+                }
+            }
+            foreach (var e in activeEnemies)
+            {
+                if (e != null)
+                {
+                    e.gameObject.SetActive(true);
+                    e.InitializeStats();
+                }
+            }
+
             batonPassChainCount = 0;
             CurrentState = BattleState.Start;
             CalculateTurnOrder();
@@ -113,13 +149,21 @@ namespace PixelMindscape.Battle
                     batonPassChainCount = 0;
                 }
 
+                Debug.Log($"[BattleManager] Turn started for: {current.gameObject.name} (IsPlayerSide: {current.IsPlayerSide})");
+                current.OnTurnStartCleanUp();
                 OnTurnStarted?.Invoke(current);
+
+                if (isQueuePaused)
+                {
+                    Debug.LogWarning($"[BattleManager] Queue is currently PAUSED (likely by BattleTutorialManager). Waiting for ResumeQueue() before {current.gameObject.name} can act...");
+                }
                 while (isQueuePaused) yield return null;
 
                 CurrentState = current.IsPlayerSide ? BattleState.PlayerTurn : BattleState.EnemyTurn;
 
                 if (CurrentState == BattleState.EnemyTurn)
                 {
+                    Debug.Log($"[BattleManager] Executing Enemy AI for {current.gameObject.name}...");
                     ExecuteEnemyAI(current);
                 }
 
@@ -178,6 +222,7 @@ namespace PixelMindscape.Battle
                 else
                 {
                     // Normal turn ends, move to back
+                    current.OnTurnEndCleanUp();
                     turnQueue.Remove(current);
                     if (!current.IsDefeated) turnQueue.Add(current);
                     
@@ -219,6 +264,7 @@ namespace PixelMindscape.Battle
             // 2. Fallback: Attack lowest HP target
             if (bestSkill != null && bestTarget != null)
             {
+                Debug.Log($"[BattleManager] Enemy AI: {enemy.gameObject.name} chose Skill '{bestSkill.displayName}' against {bestTarget.gameObject.name}");
                 SubmitAction(new SkillAction 
                 { 
                     Source = enemy, 
@@ -228,9 +274,11 @@ namespace PixelMindscape.Battle
             }
             else
             {
+                Debug.Log($"[BattleManager] Enemy AI checking party targets. Total party count: {activeParty.Count}");
                 Combatant lowestHpTarget = null;
                 foreach (var p in activeParty)
                 {
+                    Debug.Log($"[BattleManager] Party member '{p.gameObject.name}': CurrentHP={p.CurrentHP}/{p.MaxHP}, IsDefeated={p.IsDefeated}, ActiveInHierarchy={p.gameObject.activeInHierarchy}");
                     if (p.IsDefeated) continue;
                     if (lowestHpTarget == null || p.HpPercent < lowestHpTarget.HpPercent)
                         lowestHpTarget = p;
@@ -238,11 +286,16 @@ namespace PixelMindscape.Battle
 
                 if (lowestHpTarget != null)
                 {
+                    Debug.Log($"[BattleManager] Enemy AI: {enemy.gameObject.name} chose Attack against {lowestHpTarget.gameObject.name}");
                     SubmitAction(new AttackAction 
                     { 
                         Source = enemy, 
                         Targets = new List<Combatant> { lowestHpTarget } 
                     });
+                }
+                else
+                {
+                    Debug.LogError($"[BattleManager] Enemy AI: {enemy.gameObject.name} could not find any valid active party targets to attack! (activeParty.Count={activeParty.Count})");
                 }
             }
         }
@@ -316,6 +369,7 @@ namespace PixelMindscape.Battle
         public bool AllEnemiesDown() => activeEnemies.TrueForAll(e => e.IsDown || e.IsDefeated);
         
         public List<Combatant> GetActiveEnemies() => activeEnemies;
+        public List<Combatant> GetActiveParty() => activeParty;
 
         private void CheckBattleEndConditions()
         {
@@ -331,8 +385,8 @@ namespace PixelMindscape.Battle
             // TODO: To be implemented with the Confidant system.
         }
 
-        public void PauseQueue() { isQueuePaused = true; }
-        public void ResumeQueue() { isQueuePaused = false; }
+        public void PauseQueue() { Debug.Log("[BattleManager] PauseQueue() called. Battle queue paused."); isQueuePaused = true; }
+        public void ResumeQueue() { Debug.Log("[BattleManager] ResumeQueue() called. Battle queue resumed."); isQueuePaused = false; }
 
         private float CalculateAllOutDamage() { return 100f; } // Placeholder
         

@@ -29,7 +29,15 @@ namespace PixelMindscape.Battle
             };
 
             float rawDamage = basePower * attacker.GetAttackStatFor(element) * multiplier;
+            if (attacker != null)
+            {
+                rawDamage *= attacker.BatonPassMultiplier;
+            }
             float mitigated = rawDamage - defender.GetDefenseStatFor(element);
+            if (defender != null && defender.IsGuarding)
+            {
+                mitigated *= 0.5f;
+            }
 
             return new DamageResult
             {

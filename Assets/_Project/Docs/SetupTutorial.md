@@ -95,3 +95,37 @@ We added new commands so you don't need timelines for simple 2D pixel-art cutsce
 - **Trigger Name**: Type the exact name of the Trigger parameter in your Animator (e.g., `Surprised`, `Laugh`).
 
 *Remember: Cutscenes will automatically flip the `CutsceneDirector.IsCutscenePlaying` flag, ensuring the player can't walk away during the sequence!*
+
+---
+
+## 5. Setting up Overworld Battle Encounters
+
+This guide explains how to set up an overworld trigger or NPC that transports the player into a turn-based battle scene when touched or interacted with.
+
+**Step 1: Verify Build Settings**
+- In the Unity top menu, go to `File -> Build Settings...`.
+- Ensure both your Overworld scene and your Battle scene (e.g., `TurnBased.unity`) are added to the **Scenes In Build** list. (If they aren't, open each scene and click `Add Open Scenes`).
+
+**Step 2: Create the Overworld Encounter Trigger**
+- Open your Overworld scene.
+- Right-click in the Hierarchy -> `Create Empty`. Name it `EncounterTrigger_Enemy`.
+- In the Inspector, click `Add Component` -> `BoxCollider2D`.
+- Check the **Is Trigger** box on the BoxCollider2D so the player can walk into it without getting blocked.
+- Adjust the collider size and move it to where you want the encounter to happen on the map.
+
+**Step 3: Add the Fungus Flowchart & Trigger Event**
+- With `EncounterTrigger_Enemy` selected, click `Add Component` -> `Flowchart`.
+- Open the Fungus Flowchart window (`Tools -> Fungus -> Flowchart Window`) and select the default Block (rename it to `StartEncounter`).
+- In the Inspector for the `StartEncounter` block, click the **Execute On Event** dropdown and select `Mono -> On Trigger Enter 2D`.
+- In the event settings that appear, set the **Tag** parameter to `Player`. (Ensure your player GameObject has the `Player` tag assigned in the Inspector).
+
+**Step 4: Add the Start Battle Command**
+- With the `StartEncounter` block selected in the Flowchart window, click the `+` button at the bottom of the command list.
+- Navigate to `PixelMindscape -> Start Battle`.
+- In the command's Inspector, find the **Battle Scene Name** field.
+- Type the exact name of your battle scene (e.g., `TurnBased`).
+
+**Step 5: Verify GameManager Presence**
+- Ensure you have a `GameManager` GameObject in your Overworld scene with the `GameManager.cs` script attached. 
+- When the player walks into the trigger, Fungus fires the command, `GameManager` transitions the scene to `TurnBased`, and `BattleManager` automatically starts the battle!
+

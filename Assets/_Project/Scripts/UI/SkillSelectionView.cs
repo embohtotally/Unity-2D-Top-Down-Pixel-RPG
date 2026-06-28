@@ -41,7 +41,7 @@ namespace PixelMindscape.UI
                 var button = btnObj.GetComponent<Button>();
                 var text = btnObj.GetComponentInChildren<TMP_Text>();
 
-                if (text != null) text.SetText($"{skill.displayName} ({skill.spCost} SP)");
+                if (text != null) text.SetText($"{skill.displayName} [{skill.element}] ({skill.spCost} SP) - Pwr: {skill.basePower} | Scope: {skill.targetScope}");
 
                 var currentSkill = skill;
                 if (button != null) button.onClick.AddListener(() => 
