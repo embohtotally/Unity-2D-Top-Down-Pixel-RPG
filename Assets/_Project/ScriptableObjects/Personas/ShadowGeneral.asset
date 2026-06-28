@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92e5faedca1ed0849822d0d1eae8bf7c, type: 3}
+  m_Name: Shadow General
+  m_EditorClassIdentifier: 
+  personaId: enemy_shadow_general
+  displayName: Shadow General
+  arcana: Tower
+  summonFlashFrames: []
+  baseLevel: 55
+  baseHP: 3500
+  baseSP: 180
+  baseStrength: 52
+  baseMagic: 40
+  baseEndurance: 48
+  baseAgility: 35
+  baseLuck: 28
+  innateSkillsByLevel:
+  - level: 1
+    skill: {fileID: 11400000, guid: 3f20ad2753d4f514b96a3d97827ea8bf, type: 2}
+  - level: 1
+    skill: {fileID: 11400000, guid: cc76f0e95cbee734a92b56a4c2a25d98, type: 2}
+  affinityTable:
+  - element: 0
+    affinity: 3
+  - element: 1
+    affinity: 3
+  - element: 2
+    affinity: 0
+  - element: 3
+    affinity: 0
+  - element: 4
+    affinity: 0
+  - element: 5
+    affinity: 0
+  - element: 6
+    affinity: 0
+  - element: 7
+    affinity: 1
+  - element: 8
+    affinity: 0
+  - element: 9
+    affinity: 0
+  - element: 10
+    affinity: 0
+  isFusionOnly: 0

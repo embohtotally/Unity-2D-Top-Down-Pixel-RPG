@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4767220108130179706}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.311176, y: -0.45564914, z: -1.0069926}
+  m_LocalPosition: {x: 10.311176, y: -0.45564902, z: -1.0069926}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -47,13 +47,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TurnPortrait: {fileID: 7155605520769666608, guid: c863dabf6d00f3541b7529f3fc251c67, type: 3}
   IsPlayerSide: 1
+  <EffectiveAgility>k__BackingField: 10
+  <IsDown>k__BackingField: 0
+  <IsDefeated>k__BackingField: 0
   Personality: 0
+  <CurrentHP>k__BackingField: 100
+  <MaxHP>k__BackingField: 100
+  <CurrentSP>k__BackingField: 28
+  <MaxSP>k__BackingField: 50
+  <BaseAttackPower>k__BackingField: 15
+  <IsGuarding>k__BackingField: 0
+  <BatonPassMultiplier>k__BackingField: 1
   startingHP: 100
   startingSP: 50
   baseAttack: 15
+  baseMagic: 15
   agility: 10
   strongAgainst: 0
   weakAgainst: 10
+  availableSkills: []
 --- !u!1 &6698538467492221469
 GameObject:
   m_ObjectHideFlags: 0

@@ -31,11 +31,45 @@ namespace PixelMindscape.UI
 
             ClearButtons();
 
-            if (skills == null) return;
+            if (skills == null || skills.Count == 0)
+            {
+                Debug.LogWarning("[SkillSelectionView] Show called with 0 skills! Ensure the active combatant has skills assigned in the Inspector.");
+                return;
+            }
+
+            Debug.Log($"[SkillSelectionView] Spawning buttons for {skills.Count} skills...");
+
+            Transform actualContainer = buttonContainer != null ? buttonContainer : (selectionPanel != null ? selectionPanel.transform : transform);
 
             foreach (var skill in skills)
             {
-                var btnObj = Instantiate(skillButtonPrefab, buttonContainer);
+                GameObject btnObj = null;
+                if (skillButtonPrefab != null)
+                {
+                    btnObj = Instantiate(skillButtonPrefab, actualContainer);
+                }
+                else
+                {
+                    Debug.LogWarning("[SkillSelectionView] SkillButtonPrefab is not assigned in the Inspector! Generating a default UI button dynamically.");
+                    btnObj = new GameObject($"Btn_{skill.skillId}");
+                    btnObj.transform.SetParent(actualContainer, false);
+                    var rect = btnObj.AddComponent<RectTransform>();
+                    rect.sizeDelta = new Vector2(400, 60);
+                    var img = btnObj.AddComponent<Image>();
+                    img.color = new Color32(40, 40, 40, 240); // sleek dark grey
+                    btnObj.AddComponent<Button>();
+
+                    var textObj = new GameObject("Text");
+                    textObj.transform.SetParent(btnObj.transform, false);
+                    var textRect = textObj.AddComponent<RectTransform>();
+                    textRect.anchorMin = Vector2.zero;
+                    textRect.anchorMax = Vector2.one;
+                    textRect.sizeDelta = Vector2.zero;
+                    var tmp = textObj.AddComponent<TextMeshProUGUI>();
+                    tmp.fontSize = 24;
+                    tmp.alignment = TextAlignmentOptions.Center;
+                }
+
                 activeButtons.Add(btnObj);
 
                 var button = btnObj.GetComponent<Button>();

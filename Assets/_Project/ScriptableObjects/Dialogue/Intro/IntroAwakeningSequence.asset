@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ea476ae09b01004195fe2a1862d8ce8, type: 3}
+  m_Name: IntroAwakeningSequence
+  m_EditorClassIdentifier: 
+  lines:
+  - {fileID: 11400000, guid: e9dfe2a3b2ef2e94db587a8a6c316db3, type: 2}
+  - {fileID: 11400000, guid: c2b5689287331814fa832d561f16018a, type: 2}
+  - {fileID: 11400000, guid: f5d1a4ef5251dea40bd1d7a9e86da829, type: 2}
+  - {fileID: 11400000, guid: 463c814bc942837459f7584d9dfaa136, type: 2}
+  - {fileID: 11400000, guid: f8ac33b882373c84d82031f324038cca, type: 2}
+  - {fileID: 11400000, guid: e6a4ba304bfa59248b59727937268ebf, type: 2}
+  - {fileID: 11400000, guid: ae17a6ca1e2c13a47a0daadef8ce4f6e, type: 2}
+  - {fileID: 11400000, guid: fe72b2f31c3144c4094bba58848294d7, type: 2}

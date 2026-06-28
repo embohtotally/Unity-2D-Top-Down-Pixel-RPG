@@ -158,7 +158,33 @@ namespace PixelMindscape.UI
             if (skillSelection != null)
             {
                 SwitchState(CombatUIState.SkillSelect);
-                var skills = battleManager.ActiveCombatant != null ? battleManager.ActiveCombatant.GetAvailableSkills() : new List<SkillData>();
+                Combatant activeHero = battleManager.ActiveCombatant;
+                if (activeHero == null && battleManager.GetActiveParty().Count > 0)
+                {
+                    activeHero = battleManager.GetActiveParty()[0];
+                }
+                if (activeHero == null || activeHero.GetAvailableSkills().Count == 0)
+                {
+                    // Look through all heroes in the entire scene to find the one where the user assigned skills!
+                    var allHeroes = FindObjectsOfType<HeroCombatant>(true);
+                    foreach (var hero in allHeroes)
+                    {
+                        if (hero.GetAvailableSkills().Count > 0)
+                        {
+                            activeHero = hero;
+                            break;
+                        }
+                    }
+                    if (activeHero == null && allHeroes.Length > 0)
+                    {
+                        activeHero = allHeroes[0];
+                    }
+                }
+
+                var skills = activeHero != null ? activeHero.GetAvailableSkills() : new List<SkillData>();
+                if (activeHero != null) Debug.Log($"[UICombatPanel] Found active hero '{activeHero.gameObject.name}' with {skills.Count} skills.");
+                else Debug.LogWarning("[UICombatPanel] No active hero could be detected in the scene!");
+
                 skillSelection.Show(skills, OnPlayerSelectsSkill, () => 
                 {
                     SwitchState(CombatUIState.CommandSelect);

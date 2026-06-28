@@ -26,13 +26,53 @@ namespace PixelMindscape.Dialogue
         {
             foreach (var line in sequence.lines)
             {
-                // Placeholder for actual lookup
-                // var character = CharacterLookup.GetFungusCharacter(line.speakerId); 
-                // var portrait = character.GetPortrait(line.expressionId);
-
                 var sayDialog = SayDialog.GetSayDialog();
-                // sayDialog.SetCharacter(character);
-                // sayDialog.SetCharacterImage(portrait);
+
+                string displayName = "";
+                Color nameColor = Color.white;
+
+                if (line.speakerId == "char_protagonist")
+                {
+                    displayName = "Ren Amamiya";
+                    nameColor = new Color32(220, 50, 50, 255); // Crimson Red for Joker
+                }
+                else if (line.speakerId == "char_brawler")
+                {
+                    displayName = "Takeshi";
+                    nameColor = new Color32(240, 180, 40, 255); // Golden Yellow for Best Friend
+                }
+                else if (line.speakerId == "char_mage")
+                {
+                    displayName = "Hana";
+                    nameColor = new Color32(255, 100, 150, 255); // Elegant Pink
+                }
+                else if (line.speakerId == "char_rogue")
+                {
+                    displayName = "Yuki";
+                    nameColor = new Color32(80, 220, 100, 255); // Rogue Green
+                }
+                else if (line.speakerId == "char_tactician")
+                {
+                    displayName = "Sakura";
+                    nameColor = new Color32(140, 100, 255, 255); // Tactician Purple
+                }
+                else if (line.speakerId == "char_healer")
+                {
+                    displayName = "Mai";
+                    nameColor = new Color32(100, 200, 255, 255); // Gentle Cyan
+                }
+                else if (line.speakerId == "narrator")
+                {
+                    displayName = ""; // Leave blank for immersive narration
+                    nameColor = Color.white;
+                }
+                else if (!string.IsNullOrEmpty(line.speakerId))
+                {
+                    displayName = line.speakerId;
+                    nameColor = Color.white;
+                }
+
+                sayDialog.SetCharacterName(displayName, nameColor);
 
                 yield return StartCoroutine(sayDialog.DoSay(
                     line.text,

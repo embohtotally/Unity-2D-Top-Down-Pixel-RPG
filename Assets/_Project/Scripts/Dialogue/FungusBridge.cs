@@ -43,5 +43,24 @@ namespace PixelMindscape.Dialogue
             // if (rankEntry != null && !string.IsNullOrEmpty(rankEntry.grantedAbilityId))
             //    GameManager.Instance.Battle.GrantPassiveAbility(rankEntry.grantedAbilityId);
         }
+
+        public void CheckStoryFlag(string flagName)
+        {
+            var save = GameManager.Instance.CurrentSave;
+            bool hasFlag = save != null && save.storyFlags.Contains(flagName);
+            if (sharedFlowchart != null)
+            {
+                sharedFlowchart.SetBooleanVariable(flagName, hasFlag);
+            }
+        }
+
+        public void SetStoryFlag(string flagName)
+        {
+            var save = GameManager.Instance.CurrentSave;
+            if (save != null && !save.storyFlags.Contains(flagName))
+            {
+                save.storyFlags.Add(flagName);
+            }
+        }
     }
 }

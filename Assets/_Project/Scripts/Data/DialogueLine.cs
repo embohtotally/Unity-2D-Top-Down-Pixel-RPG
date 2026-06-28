@@ -12,9 +12,4 @@ namespace PixelMindscape.Data
         public string expressionId;       // maps to a portrait frame in the speaker's portrait sheet
     }
 
-    [CreateAssetMenu(fileName = "NewDialogueSequence", menuName = "PixelMindscape/Dialogue/Sequence")]
-    public class DialogueSequence : ScriptableObject
-    {
-        public List<DialogueLine> lines; // played in order by the custom Fungus command
-    }
 }

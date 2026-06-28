@@ -8,7 +8,9 @@
         "PixelMindscape.Persona",
         "PixelMindscape.Dialogue",
         "DOTween.Modules",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Unity.Splines",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
