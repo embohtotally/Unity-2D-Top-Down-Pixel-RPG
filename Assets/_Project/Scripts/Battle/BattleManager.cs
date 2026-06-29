@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using PixelMindscape.Data;
 using PixelMindscape.Core;
@@ -243,18 +244,98 @@ namespace PixelMindscape.Battle
 
         private void ExecuteEnemyAI(Combatant enemy)
         {
+            var availableSkills = enemy.GetAvailableSkills();
+            var profile = enemy.EnemyAIType;
+
+            Debug.Log($"[BattleManager] Executing Enemy AI for '{enemy.gameObject.name}'. Profile: {profile}, HP: {enemy.HpPercent:P0}");
+
+            // --- Pre-Action: Healing & Buffs ---
+            var healingSkills = availableSkills.Where(s => s.category == SkillCategory.Healing && enemy.CurrentSP >= s.spCost);
+            var supportSkills = availableSkills.Where(s => s.category == SkillCategory.Support && enemy.CurrentSP >= s.spCost);
+
+            // Self heal if critical
+            if (enemy.HpPercent < 0.3f && healingSkills.Any())
+            {
+                Debug.Log($"[BattleManager] Enemy AI ({profile}): {enemy.gameObject.name} is at critical HP (<30%) and chose Self-Heal!");
+                SubmitAction(new SkillAction { Source = enemy, Targets = new List<Combatant> { enemy }, skill = healingSkills.First() });
+                return;
+            }
+
+            // Heal an ally (other enemy combatant) if they are below 50%
+            if (activeEnemies.Count > 1)
+            {
+                var woundedAlly = activeEnemies
+                    .Where(e => e != enemy && !e.IsDefeated && e.HpPercent < 0.5f)
+                    .OrderBy(e => e.HpPercent)
+                    .FirstOrDefault();
+                if (woundedAlly != null && healingSkills.Any())
+                {
+                    Debug.Log($"[BattleManager] Enemy AI ({profile}): {enemy.gameObject.name} chose to Heal wounded ally {woundedAlly.gameObject.name}");
+                    SubmitAction(new SkillAction { Source = enemy, Targets = new List<Combatant> { woundedAlly }, skill = healingSkills.First() });
+                    return;
+                }
+            }
+
+            // Use a support buff if nothing urgent and we have one
+            if (supportSkills.Any() && (!healingSkills.Any() || enemy.HpPercent > 0.5f))
+            {
+                // Target self or random ally; for simplicity, buff self
+                Debug.Log($"[BattleManager] Enemy AI ({profile}): {enemy.gameObject.name} chose Support Buff!");
+                SubmitAction(new SkillAction { Source = enemy, Targets = new List<Combatant> { enemy }, skill = supportSkills.First() });
+                return;
+            }
+
+            // --- Find lowest HP target for fallback and profile checks ---
+            Combatant lowestHpTarget = null;
+            foreach (var p in activeParty)
+            {
+                if (p.IsDefeated) continue;
+                if (lowestHpTarget == null || p.HpPercent < lowestHpTarget.HpPercent)
+                    lowestHpTarget = p;
+            }
+
+            // --- Profile-based modifications ---
+            switch (profile)
+            {
+                case EnemyAIType.Aggressive:
+                    // Default behaviour – no change to the current two-step priority.
+                    break;
+                case EnemyAIType.Tactical:
+                    // Prefer medium-cost skills; if HP < 40%, consider guarding
+                    if (enemy.HpPercent < 0.4f)
+                    {
+                        Debug.Log($"[BattleManager] Enemy AI ({profile}): {enemy.gameObject.name} is low on HP (<40%) and chose to Guard!");
+                        SubmitAction(new GuardAction { Source = enemy });
+                        return;
+                    }
+                    break;
+                case EnemyAIType.Desperate:
+                    // If HP < 25%, ignore SP limits and use strongest available move
+                    if (enemy.HpPercent < 0.25f && availableSkills.Any() && lowestHpTarget != null)
+                    {
+                        var bestSkillDesperate = availableSkills.OrderByDescending(s => s.basePower).First();
+                        if (enemy.CurrentSP >= bestSkillDesperate.spCost)
+                        {
+                            Debug.Log($"[BattleManager] Enemy AI ({profile}): {enemy.gameObject.name} is desperate (<25%) and chose strongest move '{bestSkillDesperate.displayName}'!");
+                            SubmitAction(new SkillAction { Source = enemy, Targets = new List<Combatant> { lowestHpTarget }, skill = bestSkillDesperate });
+                            return;
+                        }
+                    }
+                    break;
+            }
+
+            // --- Existing Priority 1: Find a skill that hits a weakness (Skipping Downed Targets) ---
             SkillData bestSkill = null;
             Combatant bestTarget = null;
 
-            // 1. Priority: Find a skill that hits a weakness
-            var availableSkills = enemy.GetAvailableSkills();
             foreach (var skill in availableSkills)
             {
                 if (enemy.CurrentSP < skill.spCost) continue;
 
                 foreach (var partyMember in activeParty)
                 {
-                    if (partyMember.IsDefeated) continue;
+                    // Prevent Wasting 'One More' on Already-Downed Targets!
+                    if (partyMember.IsDefeated || partyMember.IsDown) continue;
 
                     var result = DamageCalculator.CalculateDamage(enemy, partyMember, skill);
                     if (result.affinity == Affinity.Weak)
@@ -267,42 +348,31 @@ namespace PixelMindscape.Battle
                 if (bestSkill != null) break;
             }
 
-            // 2. Fallback: Attack lowest HP target
             if (bestSkill != null && bestTarget != null)
             {
-                Debug.Log($"[BattleManager] Enemy AI: {enemy.gameObject.name} chose Skill '{bestSkill.displayName}' against {bestTarget.gameObject.name}");
+                Debug.Log($"[BattleManager] Enemy AI ({profile}): {enemy.gameObject.name} chose Skill '{bestSkill.displayName}' against weakness on {bestTarget.gameObject.name}");
                 SubmitAction(new SkillAction 
                 { 
                     Source = enemy, 
                     Targets = new List<Combatant> { bestTarget },
                     skill = bestSkill
                 });
+                return;
+            }
+
+            // --- Existing Fallback: Attack lowest HP target ---
+            if (lowestHpTarget != null)
+            {
+                Debug.Log($"[BattleManager] Enemy AI ({profile}): {enemy.gameObject.name} chose Attack against {lowestHpTarget.gameObject.name}");
+                SubmitAction(new AttackAction 
+                { 
+                    Source = enemy, 
+                    Targets = new List<Combatant> { lowestHpTarget } 
+                });
             }
             else
             {
-                Debug.Log($"[BattleManager] Enemy AI checking party targets. Total party count: {activeParty.Count}");
-                Combatant lowestHpTarget = null;
-                foreach (var p in activeParty)
-                {
-                    Debug.Log($"[BattleManager] Party member '{p.gameObject.name}': CurrentHP={p.CurrentHP}/{p.MaxHP}, IsDefeated={p.IsDefeated}, ActiveInHierarchy={p.gameObject.activeInHierarchy}");
-                    if (p.IsDefeated) continue;
-                    if (lowestHpTarget == null || p.HpPercent < lowestHpTarget.HpPercent)
-                        lowestHpTarget = p;
-                }
-
-                if (lowestHpTarget != null)
-                {
-                    Debug.Log($"[BattleManager] Enemy AI: {enemy.gameObject.name} chose Attack against {lowestHpTarget.gameObject.name}");
-                    SubmitAction(new AttackAction 
-                    { 
-                        Source = enemy, 
-                        Targets = new List<Combatant> { lowestHpTarget } 
-                    });
-                }
-                else
-                {
-                    Debug.LogError($"[BattleManager] Enemy AI: {enemy.gameObject.name} could not find any valid active party targets to attack! (activeParty.Count={activeParty.Count})");
-                }
+                Debug.LogError($"[BattleManager] Enemy AI: {enemy.gameObject.name} could not find any valid active party targets to attack! (activeParty.Count={activeParty.Count})");
             }
         }
 

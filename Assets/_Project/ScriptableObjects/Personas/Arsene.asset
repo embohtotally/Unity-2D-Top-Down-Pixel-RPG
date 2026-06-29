@@ -13,9 +13,19 @@ MonoBehaviour:
   m_Name: Arsene
   m_EditorClassIdentifier: 
   personaId: persona_arsene
-  displayName: Arsène
+  displayName: "Ars\xE8ne"
   arcana: Fool
-  summonFlashFrames: []
+  summonFlashFrames:
+  - {fileID: -863660318883530726, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 3649361028988115377, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 4154451335973024949, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 1852644907630618781, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -3653755101740559034, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 3194815916084371252, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 2470592991052866396, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -319850197674537336, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -3034911477646579030, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  personaModelPrefab: {fileID: 4767220108130179706, guid: 2ba938bbe2ea9924da80e6ae90b498cd, type: 3}
   baseLevel: 1
   baseHP: 42
   baseSP: 26
@@ -24,7 +34,15 @@ MonoBehaviour:
   baseEndurance: 4
   baseAgility: 9
   baseLuck: 4
-  innateSkillsByLevel: []
+  innateSkillsByLevel:
+  - level: 1
+    skill: {fileID: 11400000, guid: 3f20ad2753d4f514b96a3d97827ea8bf, type: 2}
+  - level: 2
+    skill: {fileID: 11400000, guid: 8e04f67ce51c48d4c906a625dff05471, type: 2}
+  - level: 4
+    skill: {fileID: 11400000, guid: 8fc86664fd0cd2c4a8ef1354b6da394c, type: 2}
+  - level: 7
+    skill: {fileID: 11400000, guid: 809931a1a72102545807b289b0cee874, type: 2}
   affinityTable:
   - element: 0
     affinity: 0

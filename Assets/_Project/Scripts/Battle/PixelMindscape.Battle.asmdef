@@ -5,7 +5,9 @@
         "PixelMindscape.Data",
         "PixelMindscape.Core",
         "DOTween.Modules",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Unity.Splines",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

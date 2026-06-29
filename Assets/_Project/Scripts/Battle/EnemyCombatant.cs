@@ -7,6 +7,7 @@ namespace PixelMindscape.Battle
     {
         [Header("Enemy ScriptableObject Data")]
         [SerializeField] private PersonaData enemyData;
+        public override EnemyAIType EnemyAIType => enemyData != null ? enemyData.aiType : EnemyAIType.Aggressive;
 
         [Header("Enemy Initial Stats (Fallback if no PersonaData assigned)")]
         [SerializeField] private int startingHP = 50;

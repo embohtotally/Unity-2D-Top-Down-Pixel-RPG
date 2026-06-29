@@ -18,6 +18,7 @@ namespace PixelMindscape.Data
         public string displayName;
         public string arcana;                 // e.g. "Magician", "Empress" — drives fusion compatibility lookups
         public Sprite[] summonFlashFrames;    // 6-10 frame burst animation
+        public GameObject personaModelPrefab; // Optional physical model/sprite to instantiate in the scene
 
         [Header("Base Stats (at base level)")]
         public int baseLevel;
@@ -37,5 +38,8 @@ namespace PixelMindscape.Data
 
         [Header("Fusion")]
         public bool isFusionOnly; // true if this Persona cannot be recruited via negotiation, only produced by fusion
+
+        [Header("Enemy AI Profile")]
+        public EnemyAIType aiType = EnemyAIType.Aggressive; // Profile for when this Persona functions as an enemy shadow
     }
 }

@@ -18,4 +18,6 @@ namespace PixelMindscape.Data
 
     // Placeholder enum for status effects
     public enum StatusEffectType { None, Burn, Freeze, Shock, Dizzy, Confuse, Fear, Brainwash, Sleep, Despair, Rage, Hunger }
+
+    public enum EnemyAIType { Aggressive, Tactical, Desperate }
 }

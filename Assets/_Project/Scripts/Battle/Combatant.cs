@@ -18,6 +18,7 @@ namespace PixelMindscape.Battle
         [field: SerializeField] public bool IsDefeated { get; protected set; }
         
         public ShadowPersonality Personality;
+        public virtual EnemyAIType EnemyAIType => EnemyAIType.Aggressive;
         public float HpPercent => (float)CurrentHP / MaxHP;
 
         [field: SerializeField] public int CurrentHP { get; protected set; }

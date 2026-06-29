@@ -15,7 +15,17 @@ MonoBehaviour:
   personaId: persona_titania
   displayName: Titania
   arcana: Empress
-  summonFlashFrames: []
+  summonFlashFrames:
+  - {fileID: -863660318883530726, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 3649361028988115377, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 4154451335973024949, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 1852644907630618781, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -3653755101740559034, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 3194815916084371252, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 2470592991052866396, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -319850197674537336, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -3034911477646579030, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  personaModelPrefab: {fileID: 4767220108130179706, guid: 2ba938bbe2ea9924da80e6ae90b498cd, type: 3}
   baseLevel: 35
   baseHP: 510
   baseSP: 240

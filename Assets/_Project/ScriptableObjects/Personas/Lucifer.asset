@@ -15,7 +15,17 @@ MonoBehaviour:
   personaId: persona_lucifer
   displayName: Lucifer
   arcana: Star
-  summonFlashFrames: []
+  summonFlashFrames:
+  - {fileID: -863660318883530726, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 3649361028988115377, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 4154451335973024949, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 1852644907630618781, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -3653755101740559034, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 3194815916084371252, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: 2470592991052866396, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -319850197674537336, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -3034911477646579030, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  personaModelPrefab: {fileID: 4767220108130179706, guid: 2ba938bbe2ea9924da80e6ae90b498cd, type: 3}
   baseLevel: 93
   baseHP: 1780
   baseSP: 660
@@ -24,7 +34,15 @@ MonoBehaviour:
   baseEndurance: 90
   baseAgility: 88
   baseLuck: 78
-  innateSkillsByLevel: []
+  innateSkillsByLevel:
+  - level: 1
+    skill: {fileID: 11400000, guid: cc76f0e95cbee734a92b56a4c2a25d98, type: 2}
+  - level: 1
+    skill: {fileID: 11400000, guid: e17fb55b13b645d41a971188e7838416, type: 2}
+  - level: 3
+    skill: {fileID: 11400000, guid: 3f20ad2753d4f514b96a3d97827ea8bf, type: 2}
+  - level: 5
+    skill: {fileID: 11400000, guid: 7e2c80f228b77d142a71b632e5b774b4, type: 2}
   affinityTable:
   - element: 0
     affinity: 0

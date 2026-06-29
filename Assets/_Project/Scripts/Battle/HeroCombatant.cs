@@ -36,6 +36,11 @@ namespace PixelMindscape.Battle
             IsDefeated = false;
             IsDown = false;
 
+            if (personaLoadout.Count > 0)
+            {
+                IsProtagonist = true;
+            }
+
             if (characterData != null)
             {
                 MaxHP = characterData.baseHP;
@@ -74,7 +79,14 @@ namespace PixelMindscape.Battle
             if (!isInitialSetup)
             {
                 HasSwitchedPersonaThisTurn = true;
-                if (vfxHandler != null) vfxHandler.PlayBatonPassVFX(); // use beautiful vfx flash
+                if (BattleCinematicManager.Instance != null)
+                {
+                    BattleCinematicManager.Instance.PlayPersonaSummonFlash(this, newPersona);
+                }
+                else if (vfxHandler != null) 
+                {
+                    vfxHandler.PlayBatonPassVFX(); // use beautiful vfx flash fallback
+                }
             }
             
             // Recalculate stats based on new Persona
