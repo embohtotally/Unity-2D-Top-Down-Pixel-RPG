@@ -42,15 +42,60 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat(verticalHash, 0f);
     }
 
+    private void OnEnable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        if (scene.name.Contains("Battle"))
+        {
+            // We entered a Battle Scene! Freeze physics and let BattleManager take over.
+            if (rb2D != null) rb2D.linearVelocity = Vector2.zero;
+            this.enabled = false;
+            Debug.Log($"[PlayerMovement] Entered Battle Scene '{scene.name}'. Disabling PlayerMovement.");
+        }
+        else
+        {
+            // We returned to the Overworld! Re-enable movement, unlock cutscene mode, and move back to active scene hierarchy!
+            this.enabled = true;
+            CutsceneMode = false;
+            overrideMovement = Vector2.zero;
+
+            if (PixelMindscape.Core.CutsceneDirector.Instance != null)
+            {
+                PixelMindscape.Core.CutsceneDirector.Instance.EndCutscene();
+            }
+
+            // Move out of DontDestroyOnLoad back into the active Overworld scene hierarchy!
+            if (gameObject.scene.name == "DontDestroyOnLoad")
+            {
+                UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(gameObject, scene);
+                Debug.Log($"[PlayerMovement] Returned to Overworld '{scene.name}'. Re-enabled PlayerMovement & moved to active scene.");
+            }
+        }
+    }
+
     public void SetOverrideMovement(Vector2 direction)
     {
         overrideMovement = direction;
     }
 
+    public void SetCutsceneMode(bool state)
+    {
+        CutsceneMode = state;
+    }
+
     private void Update()
     {
         // 1. Handle Input / Cutscenes
-        if (CutsceneMode)
+        if (CutsceneMode || (PixelMindscape.Core.CutsceneDirector.Instance != null && PixelMindscape.Core.CutsceneDirector.Instance.IsCutscenePlaying))
         {
             movement = overrideMovement;
         }
@@ -86,6 +131,12 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (CutsceneMode || (PixelMindscape.Core.CutsceneDirector.Instance != null && PixelMindscape.Core.CutsceneDirector.Instance.IsCutscenePlaying))
+        {
+            // Allow CutsceneDirector to move the transform directly via Lerp without Rigidbody fighting it!
+            return;
+        }
+
         // Calculate new physics position
         Vector2 targetPosition = rb2D.position + movement * moveSpeed * Time.fixedDeltaTime;
         

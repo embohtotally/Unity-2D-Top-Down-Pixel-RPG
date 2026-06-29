@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea476ae09b01004195fe2a1862d8ce7, type: 3}
+  m_Name: IntroLine_15
+  m_EditorClassIdentifier: 
+  speakerId: char_brawler
+  text: "We… we got out? But what was that place? And that thing — it was inside your head, wasn't it?"
+  expressionId: pensive

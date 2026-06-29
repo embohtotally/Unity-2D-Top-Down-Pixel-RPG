@@ -33,6 +33,17 @@ namespace PixelMindscape.Battle
         public event System.Action<Combatant> OnStatsChanged;
         public GameObject TargetHighlight { get; set; }
 
+        public void OverrideStatsFromSave(int curHP, int maxHP, int curSP, int maxSP)
+        {
+            CurrentHP = curHP;
+            MaxHP = maxHP;
+            CurrentSP = curSP;
+            MaxSP = maxSP;
+            if (hpSlider != null) { hpSlider.maxValue = MaxHP; hpSlider.value = CurrentHP; }
+            NotifyStatsChanged();
+            Debug.Log($"[Combatant] OverrideStatsFromSave: '{gameObject.name}' loaded PlayerPrefs stats => HP={CurrentHP}/{MaxHP}, SP={CurrentSP}/{MaxSP}");
+        }
+
         public void NotifyStatsChanged() => OnStatsChanged?.Invoke(this);
 
         public virtual void OnTurnStartCleanUp()

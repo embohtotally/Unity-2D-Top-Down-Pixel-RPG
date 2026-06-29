@@ -26,13 +26,58 @@ namespace PixelMindscape.Battle
         public PersonaData ActivePersonaData { get; private set; }
         public System.Collections.Generic.List<PersonaData> GetPersonaLoadout() => personaLoadout;
 
+        [Header("Persistence")]
+        [Tooltip("If true, this HeroCombatant will persist across scene loads (DontDestroyOnLoad).")]
+        [SerializeField] private bool persistAcrossScenes = true;
+        private static System.Collections.Generic.Dictionary<string, HeroCombatant> persistentHeroes = new System.Collections.Generic.Dictionary<string, HeroCombatant>();
+        private bool isInitialized = false;
+
         private void Awake()
         {
+            if (persistAcrossScenes)
+            {
+                string uniqueKey = characterData != null ? characterData.characterId : gameObject.name;
+                if (persistentHeroes.ContainsKey(uniqueKey) && persistentHeroes[uniqueKey] != this)
+                {
+                    // A persisted instance already exists! Destroy this duplicate overworld reload instance.
+                    Destroy(gameObject);
+                    return;
+                }
+                
+                transform.SetParent(null); // DontDestroyOnLoad requires root object
+                DontDestroyOnLoad(gameObject);
+                persistentHeroes[uniqueKey] = this;
+            }
+
+            if (PixelMindscape.Core.GameManager.Instance != null)
+            {
+                PixelMindscape.Core.GameManager.Instance.RegisterHero(this);
+            }
+            else
+            {
+                Debug.LogWarning($"[HeroCombatant] Awake: GameManager.Instance is null! '{gameObject.name}' could not register. Will retry in Start().");
+            }
+
             InitializeStats();
+        }
+
+        private void Start()
+        {
+            // RETRY registration! Start() is guaranteed to run AFTER all Awake() calls,
+            // so GameManager.Instance is definitely available now.
+            if (PixelMindscape.Core.GameManager.Instance != null)
+            {
+                PixelMindscape.Core.GameManager.Instance.RegisterHero(this);
+            }
+
+            base.Start(); // Call Combatant.Start() for animator/vfx handler setup
         }
 
         public override void InitializeStats()
         {
+            if (isInitialized) return; // Preserve persisted HP, SP, and Persona stats across scene loads!
+            isInitialized = true;
+
             IsPlayerSide = true;
             IsDefeated = false;
             IsDown = false;

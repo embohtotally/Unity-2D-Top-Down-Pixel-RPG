@@ -16,15 +16,15 @@ MonoBehaviour:
   displayName: Gorgon
   arcana: Death
   summonFlashFrames:
-  - {fileID: -863660318883530726, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
-  - {fileID: 3649361028988115377, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
-  - {fileID: 4154451335973024949, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
-  - {fileID: 1852644907630618781, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -2962648999309539454, guid: e27858a98b15da04bb992f5b52e8fbc0, type: 3}
+  - {fileID: -6640431629691119864, guid: e27858a98b15da04bb992f5b52e8fbc0, type: 3}
+  - {fileID: -2193471364334950494, guid: e27858a98b15da04bb992f5b52e8fbc0, type: 3}
+  - {fileID: -5334993690293544458, guid: e27858a98b15da04bb992f5b52e8fbc0, type: 3}
   - {fileID: -3653755101740559034, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
-  - {fileID: 3194815916084371252, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
-  - {fileID: 2470592991052866396, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
-  - {fileID: -319850197674537336, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
-  - {fileID: -3034911477646579030, guid: 3c6824ce6106e404c836276bef1b4f8b, type: 3}
+  - {fileID: -2299939878958666732, guid: e27858a98b15da04bb992f5b52e8fbc0, type: 3}
+  - {fileID: 2883116525542927985, guid: e27858a98b15da04bb992f5b52e8fbc0, type: 3}
+  - {fileID: -6313661044095391470, guid: e27858a98b15da04bb992f5b52e8fbc0, type: 3}
+  - {fileID: 2597899315206706969, guid: e27858a98b15da04bb992f5b52e8fbc0, type: 3}
   personaModelPrefab: {fileID: 4767220108130179706, guid: 2ba938bbe2ea9924da80e6ae90b498cd, type: 3}
   baseLevel: 44
   baseHP: 640
@@ -65,3 +65,4 @@ MonoBehaviour:
   - element: 10
     affinity: 0
   isFusionOnly: 0
+  aiType: 0

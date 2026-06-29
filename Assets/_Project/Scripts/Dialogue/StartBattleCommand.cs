@@ -13,10 +13,18 @@ namespace PixelMindscape.Dialogue
         [Tooltip("The name of the scene to load (e.g., 'Battle_Standard').")]
         public string battleSceneName = "Battle_Standard";
 
+        [Tooltip("The enemy prefab to spawn for this battle (e.g. Slime).")]
+        public GameObject enemyPrefab;
+
         public override void OnEnter()
         {
             if (GameManager.Instance != null)
             {
+                if (enemyPrefab != null)
+                {
+                    GameManager.Instance.PendingEnemyPrefab = enemyPrefab;
+                }
+                
                 // Fungus won't continue executing because the scene is unloading
                 GameManager.Instance.LoadScene(battleSceneName);
             }

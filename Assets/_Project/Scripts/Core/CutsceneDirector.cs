@@ -6,14 +6,30 @@ namespace PixelMindscape.Core
 {
     public class CutsceneDirector : MonoBehaviour
     {
-        public static CutsceneDirector Instance { get; private set; }
+        private static CutsceneDirector _instance;
+        public static CutsceneDirector Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<CutsceneDirector>();
+                    if (_instance == null)
+                    {
+                        GameObject obj = new GameObject("CutsceneDirector");
+                        _instance = obj.AddComponent<CutsceneDirector>();
+                    }
+                }
+                return _instance;
+            }
+        }
 
         public bool IsCutscenePlaying { get; private set; }
 
         private void Awake()
         {
-            if (Instance == null) Instance = this;
-            else Destroy(gameObject);
+            if (_instance == null) _instance = this;
+            else if (_instance != this) Destroy(gameObject);
         }
 
         public void BeginCutscene()
@@ -31,8 +47,39 @@ namespace PixelMindscape.Core
         {
             if (targetTransform != null)
             {
-                yield return targetTransform.DOMove(destination, duration).SetEase(Ease.Linear).WaitForCompletion();
+                // Use Component and SendMessage to bypass any Assembly Definition (.asmdef) boundaries!
+                var playerMovement = targetTransform.GetComponent("PlayerMovement");
+                if (playerMovement != null)
+                {
+                    targetTransform.SendMessage("SetCutsceneMode", true, SendMessageOptions.DontRequireReceiver);
+                    Vector3 startPos = targetTransform.position;
+                    float elapsed = 0f;
+
+                    while (elapsed < duration)
+                    {
+                        elapsed += Time.deltaTime;
+                        Vector2 direction = (destination - targetTransform.position).normalized;
+                        targetTransform.SendMessage("SetOverrideMovement", direction, SendMessageOptions.DontRequireReceiver);
+                        
+                        targetTransform.position = Vector3.Lerp(startPos, destination, elapsed / duration);
+                        yield return null;
+                    }
+
+                    targetTransform.position = destination;
+                    targetTransform.SendMessage("SetOverrideMovement", Vector2.zero, SendMessageOptions.DontRequireReceiver);
+                    if (!IsCutscenePlaying) targetTransform.SendMessage("SetCutsceneMode", false, SendMessageOptions.DontRequireReceiver);
+                }
+                else
+                {
+                    yield return targetTransform.DOMove(destination, duration).SetEase(Ease.Linear).WaitForCompletion();
+                }
             }
+        }
+
+        public void SetPlayerCutsceneMode(Component player, bool isCutscene)
+        {
+            if (player != null) player.SendMessage("SetCutsceneMode", isCutscene, SendMessageOptions.DontRequireReceiver);
+            IsCutscenePlaying = isCutscene;
         }
 
         public void FaceDirection(Transform targetTransform, Vector2 direction)

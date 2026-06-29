@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4767220108130179706}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.311176, y: -0.45564863, z: -1.0069926}
+  m_LocalPosition: {x: 10.311176, y: -0.45564842, z: -1.0069926}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48,18 +48,18 @@ MonoBehaviour:
   TurnPortrait: {fileID: 7155605520769666608, guid: c863dabf6d00f3541b7529f3fc251c67, type: 3}
   IsPlayerSide: 1
   IsProtagonist: 1
-  <EffectiveAgility>k__BackingField: 10
+  <EffectiveAgility>k__BackingField: 88
   <IsDown>k__BackingField: 0
   <IsDefeated>k__BackingField: 0
   Personality: 0
-  <CurrentHP>k__BackingField: 85
+  <CurrentHP>k__BackingField: 70
   <MaxHP>k__BackingField: 100
-  <CurrentSP>k__BackingField: 50
+  <CurrentSP>k__BackingField: 44
   <MaxSP>k__BackingField: 50
-  <BaseAttackPower>k__BackingField: 15
+  <BaseAttackPower>k__BackingField: 180
   <IsGuarding>k__BackingField: 0
   <BatonPassMultiplier>k__BackingField: 1
-  characterData: {fileID: 0}
+  characterData: {fileID: 11400000, guid: 730cd43e03c600442a6d476df56b575b, type: 2}
   personaLoadout:
   - {fileID: 11400000, guid: a41e4ecb787b12c46bbc5ac0cee229af, type: 2}
   - {fileID: 11400000, guid: 002f34eb496160d4688b47dca01df945, type: 2}
@@ -71,10 +71,11 @@ MonoBehaviour:
   agility: 10
   strongAgainst: 0
   weakAgainst: 10
+  persistAcrossScenes: 1
   availableSkills:
-  - {fileID: 11400000, guid: 1176f03b30e0b1e4da4a8fadbdd2d47a, type: 2}
-  - {fileID: 11400000, guid: 6bbee20fb0fb5d84a9acddb54fd90952, type: 2}
-  - {fileID: 11400000, guid: 4a0a7531eb228cb4a85da5d4d3f99e94, type: 2}
+  - {fileID: 11400000, guid: cc76f0e95cbee734a92b56a4c2a25d98, type: 2}
+  - {fileID: 11400000, guid: 3f20ad2753d4f514b96a3d97827ea8bf, type: 2}
+  - {fileID: 11400000, guid: 73d6eaee8f7f83a488b66b14205382cb, type: 2}
 --- !u!1 &6698538467492221469
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +132,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

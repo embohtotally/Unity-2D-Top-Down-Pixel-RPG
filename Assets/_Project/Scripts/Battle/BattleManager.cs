@@ -56,29 +56,195 @@ namespace PixelMindscape.Battle
             if (GameManager.Instance != null)
                 GameManager.Instance.Battle = this;
 
-            Debug.Log($"[BattleManager] Start: autoStartBattle={autoStartBattle}, heroesContainer assigned={(heroesContainer != null)}, enemiesContainer assigned={(enemiesContainer != null)}");
+            bool hasGameManager = GameManager.Instance != null;
+            Debug.Log($"[BattleManager] Start: autoStartBattle={autoStartBattle}, hasGameManager={hasGameManager}, heroesContainer assigned={(heroesContainer != null)}, enemiesContainer assigned={(enemiesContainer != null)}");
 
-            // Auto-start for testing purposes
-            if (autoStartBattle)
+            // Auto-start if autoStartBattle is true OR if GameManager is active (transitioned from Overworld)
+            if (autoStartBattle || hasGameManager)
             {
-                if (heroesContainer != null && enemiesContainer != null)
-                {
-                    var party = new List<Combatant>(heroesContainer.GetComponentsInChildren<Combatant>(true));
-                    var enemies = new List<Combatant>(enemiesContainer.GetComponentsInChildren<Combatant>(true));
-                    
-                    Debug.Log($"[BattleManager] Auto-Start: Found {party.Count} heroes in {heroesContainer.name}. Found {enemies.Count} enemies in {enemiesContainer.name}.");
-                    
-                    foreach (var enemy in enemies)
-                    {
-                        Debug.Log($"[BattleManager] Enemy detected in container: {enemy.gameObject.name} (Active in hierarchy: {enemy.gameObject.activeInHierarchy})");
-                    }
+                StartCoroutine(DelayedBattleSetup());
+            }
+        }
 
-                    StartBattle(party, enemies);
+        private IEnumerator DelayedBattleSetup()
+        {
+            // Wait 1 frame so ALL Awake() and Start() methods across every scene
+            // (including DontDestroyOnLoad objects) have fully completed!
+            yield return null;
+
+            if (heroesContainer == null)
+            {
+                var found = GameObject.Find("Heroes Container") ?? GameObject.Find("HeroesContainer") ?? GameObject.Find("Heroes");
+                if (found != null) heroesContainer = found.transform;
+                else heroesContainer = new GameObject("Heroes Container").transform;
+                Debug.Log($"[BattleManager] heroesContainer was not assigned in Inspector. Auto-detected/created: {heroesContainer.name}");
+            }
+
+            if (enemiesContainer == null)
+            {
+                var found = GameObject.Find("Enemies Container") ?? GameObject.Find("EnemiesContainer") ?? GameObject.Find("Enemies");
+                if (found != null) enemiesContainer = found.transform;
+                else enemiesContainer = new GameObject("Enemies Container").transform;
+                Debug.Log($"[BattleManager] enemiesContainer was not assigned in Inspector. Auto-detected/created: {enemiesContainer.name}");
+            }
+
+            // ═══════════════════════════════════════════════════════
+            // STEP 1: Find ALL HeroCombatants using every method
+            // ═══════════════════════════════════════════════════════
+            var persistedHeroes = new List<HeroCombatant>();
+
+            // Safety net: Force-scan for heroes one more time in the battle scene
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.EnsureHeroesRegistered();
+            }
+
+            // Method A: Check GameManager.ActivePartyRoster
+            if (GameManager.Instance != null && GameManager.Instance.ActivePartyRoster != null)
+            {
+                // Clean out destroyed references
+                GameManager.Instance.ActivePartyRoster.RemoveAll(h => h == null);
+                
+                foreach (var obj in GameManager.Instance.ActivePartyRoster)
+                {
+                    var hero = obj as HeroCombatant;
+                    if (hero != null && !persistedHeroes.Contains(hero))
+                        persistedHeroes.Add(hero);
+                }
+                Debug.Log($"[BattleManager] ActivePartyRoster check: found {persistedHeroes.Count} heroes.");
+            }
+
+            // Method B: FindObjectsOfType (catches DontDestroyOnLoad heroes)
+            if (persistedHeroes.Count == 0)
+            {
+                var allHeroes = FindObjectsOfType<HeroCombatant>();
+                foreach (var h in allHeroes)
+                {
+                    // DontDestroyOnLoad heroes are root objects (parent == null)
+                    // Also accept any hero NOT inside heroesContainer (those are placeholders)
+                    bool isPlaceholder = h.transform.IsChildOf(heroesContainer);
+                    if (!isPlaceholder && !persistedHeroes.Contains(h))
+                        persistedHeroes.Add(h);
+                }
+                Debug.Log($"[BattleManager] FindObjectsOfType fallback: found {persistedHeroes.Count} heroes.");
+            }
+
+            // ═══════════════════════════════════════════════════════
+            // STEP 2: Build party list
+            // ═══════════════════════════════════════════════════════
+            var party = new List<Combatant>();
+
+            if (persistedHeroes.Count > 0)
+            {
+                Debug.Log($"[BattleManager] Binding {persistedHeroes.Count} HeroCombatants to battle! Snapping to Hero_Slot_X positions.");
+
+                // Turn off pre-placed placeholder heroes in heroesContainer
+                foreach (Transform child in heroesContainer)
+                {
+                    var placeholder = child.GetComponent<Combatant>();
+                    if (placeholder != null) placeholder.gameObject.SetActive(false);
+                }
+
+                // Ensure Protagonist is always first so they get Hero_Slot_1!
+                persistedHeroes.Sort((a, b) => b.IsProtagonist.CompareTo(a.IsProtagonist));
+
+                int heroSlotIndex = 1;
+                foreach (var hero in persistedHeroes)
+                {
+                    hero.gameObject.SetActive(true);
+                    party.Add(hero);
+                    Transform slotTarget = heroesContainer.Find($"Hero_Slot_{heroSlotIndex}");
+                    if (slotTarget != null)
+                    {
+                        hero.transform.position = slotTarget.position;
+                        Debug.Log($"[BattleManager] Placed {hero.gameObject.name} at {slotTarget.name} ({slotTarget.position})");
+                    }
+                    else
+                    {
+                        hero.transform.position = heroesContainer.position;
+                        Debug.LogWarning($"[BattleManager] Could not find Hero_Slot_{heroSlotIndex}! Defaulting to container position.");
+                    }
+                    heroSlotIndex++;
+                }
+
+                // Late-register heroes with GameManager if they weren't registered yet
+                if (GameManager.Instance != null)
+                {
+                    foreach (var hero in persistedHeroes)
+                        GameManager.Instance.RegisterHero(hero);
+                }
+            }
+            else
+            {
+                party = new List<Combatant>(heroesContainer.GetComponentsInChildren<Combatant>(true));
+                Debug.Log($"[BattleManager] DontDestroyOnLoad heroes not detected. Using {party.Count} pre-placed heroes from heroesContainer. Restoring PlayerPrefs stats!");
+
+                int savedCount = PlayerPrefs.GetInt("Hero_Count", 0);
+                for (int i = 0; i < party.Count; i++)
+                {
+                    if (i < savedCount)
+                    {
+                        int curHP = PlayerPrefs.GetInt($"Hero_{i}_CurrentHP", party[i].CurrentHP);
+                        int maxHP = PlayerPrefs.GetInt($"Hero_{i}_MaxHP", party[i].MaxHP);
+                        int curSP = PlayerPrefs.GetInt($"Hero_{i}_CurrentSP", party[i].CurrentSP);
+                        int maxSP = PlayerPrefs.GetInt($"Hero_{i}_MaxSP", party[i].MaxSP);
+                        party[i].OverrideStatsFromSave(curHP, maxHP, curSP, maxSP);
+                    }
+                }
+            }
+
+            // ═══════════════════════════════════════════════════════
+            // STEP 3: Handle pending enemy prefab from Fungus
+            // ═══════════════════════════════════════════════════════
+            if (GameManager.Instance != null && GameManager.Instance.PendingEnemyPrefab != null)
+            {
+                Debug.Log($"[BattleManager] Spawning pending enemy prefab '{GameManager.Instance.PendingEnemyPrefab.name}' from Fungus!");
+                foreach (Transform child in enemiesContainer)
+                {
+                    child.gameObject.SetActive(false);
+                }
+
+                GameObject spawnedEnemy = Instantiate(GameManager.Instance.PendingEnemyPrefab, enemiesContainer);
+                spawnedEnemy.name = GameManager.Instance.PendingEnemyPrefab.name;
+                GameManager.Instance.PendingEnemyPrefab = null;
+            }
+
+            var enemies = new List<Combatant>(enemiesContainer.GetComponentsInChildren<Combatant>(true));
+
+            // Snap enemies to Enemy_Slot_X positions
+            int enemySlotIndex = 1;
+            foreach (var enemy in enemies)
+            {
+                if (!enemy.gameObject.activeInHierarchy && enemies.Count > 1)
+                    continue;
+
+                Transform enemySlotTarget = enemiesContainer.Find($"Enemy_Slot_{enemySlotIndex}");
+                if (enemySlotTarget == null) enemySlotTarget = heroesContainer.Find($"Enemy_Slot_{enemySlotIndex}");
+
+                if (enemySlotTarget != null)
+                {
+                    enemy.transform.position = enemySlotTarget.position;
+                    Debug.Log($"[BattleManager] Placed enemy {enemy.gameObject.name} at {enemySlotTarget.name} ({enemySlotTarget.position})");
                 }
                 else
                 {
-                    Debug.LogWarning("[BattleManager] Auto-Start is enabled, but heroesContainer or enemiesContainer is not assigned in the Inspector!");
+                    Debug.Log($"[BattleManager] Enemy_Slot_{enemySlotIndex} not found; leaving {enemy.gameObject.name} at its initial position.");
                 }
+                enemySlotIndex++;
+            }
+
+            // Filter out inactive placeholders
+            enemies.RemoveAll(e => !e.gameObject.activeInHierarchy);
+
+            Debug.Log($"[BattleManager] === BATTLE SETUP COMPLETE === Party: {party.Count} heroes | Enemies: {enemies.Count}");
+
+            if (party.Count > 0 && enemies.Count > 0)
+            {
+                StartBattle(party, enemies);
+            }
+            else
+            {
+                Debug.LogError($"[BattleManager] Cannot start battle! Party={party.Count}, Enemies={enemies.Count}. Check that your overworld HeroCombatants have 'Persist Across Scenes' enabled and that your enemy prefab is assigned.");
             }
         }
 
@@ -190,7 +356,16 @@ namespace PixelMindscape.Battle
 
                 // Check end conditions after action
                 CheckBattleEndConditions();
-                if (CurrentState == BattleState.Victory || CurrentState == BattleState.Defeat) yield break;
+                if (CurrentState == BattleState.Victory || CurrentState == BattleState.Defeat)
+                {
+                    if (CurrentState == BattleState.Victory && GameManager.Instance != null)
+                    {
+                        GameManager.Instance.LastBattleWon = true;
+                        yield return new WaitForSeconds(2.0f); // Allow 2 seconds for victory celebration/fist pump!
+                        GameManager.Instance.ReturnToPreviousScene();
+                    }
+                    yield break;
+                }
 
                 if (wasWeaknessHit)
                 {

@@ -15,7 +15,7 @@ MonoBehaviour:
   characterId: char_protagonist
   displayName: Ren Amamiya
   overworldPortrait: {fileID: -2548280388526295326, guid: e8fc7d3a23f265347a92976ed2df1585, type: 3}
-  baseHP: 100
+  baseHP: 111121
   baseSP: 60
   baseStrength: 8
   baseMagic: 8

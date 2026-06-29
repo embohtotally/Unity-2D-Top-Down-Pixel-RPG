@@ -52,9 +52,89 @@ namespace PixelMindscape.Core
             }
         }
 
+        public string PreviousSceneName { get; private set; }
+        public bool LastBattleWon { get; set; }
+        public GameObject PendingEnemyPrefab { get; set; }
+
+        public List<MonoBehaviour> ActivePartyRoster { get; private set; } = new List<MonoBehaviour>();
+
+        public void RegisterHero(MonoBehaviour hero)
+        {
+            if (hero != null && !ActivePartyRoster.Contains(hero))
+            {
+                ActivePartyRoster.Add(hero);
+                Debug.Log($"[GameManager] Registered hero '{hero.gameObject.name}' to ActivePartyRoster. Total party size: {ActivePartyRoster.Count}");
+            }
+        }
+
+        /// <summary>
+        /// Scans the entire scene for all HeroCombatant MonoBehaviours and ensures
+        /// they are registered in ActivePartyRoster. Called right before scene transitions.
+        /// Uses type name string comparison to avoid Assembly Definition cross-reference issues.
+        /// </summary>
+        public void EnsureHeroesRegistered()
+        {
+            // Clean out any destroyed references first
+            ActivePartyRoster.RemoveAll(h => h == null);
+
+            var allMonoBehaviours = FindObjectsOfType<MonoBehaviour>();
+            foreach (var mb in allMonoBehaviours)
+            {
+                if (mb.GetType().Name == "HeroCombatant")
+                {
+                    if (mb.transform.parent == null) DontDestroyOnLoad(mb.gameObject);
+                    RegisterHero(mb);
+                }
+            }
+            Debug.Log($"[GameManager] EnsureHeroesRegistered complete. ActivePartyRoster size: {ActivePartyRoster.Count}");
+        }
+
+        public void SavePartyToPlayerPrefs()
+        {
+            PlayerPrefs.SetInt("Hero_Count", ActivePartyRoster.Count);
+            for (int i = 0; i < ActivePartyRoster.Count; i++)
+            {
+                var hero = ActivePartyRoster[i];
+                if (hero == null) continue;
+
+                var type = hero.GetType();
+                int curHP = (int)(type.GetProperty("CurrentHP")?.GetValue(hero) ?? 100);
+                int maxHP = (int)(type.GetProperty("MaxHP")?.GetValue(hero) ?? 100);
+                int curSP = (int)(type.GetProperty("CurrentSP")?.GetValue(hero) ?? 50);
+                int maxSP = (int)(type.GetProperty("MaxSP")?.GetValue(hero) ?? 50);
+
+                PlayerPrefs.SetInt($"Hero_{i}_CurrentHP", curHP);
+                PlayerPrefs.SetInt($"Hero_{i}_MaxHP", maxHP);
+                PlayerPrefs.SetInt($"Hero_{i}_CurrentSP", curSP);
+                PlayerPrefs.SetInt($"Hero_{i}_MaxSP", maxSP);
+                PlayerPrefs.SetString($"Hero_{i}_Name", hero.gameObject.name);
+            }
+            PlayerPrefs.Save();
+            Debug.Log($"[GameManager] SavePartyToPlayerPrefs: Persistently saved {ActivePartyRoster.Count} heroes to PlayerPrefs.");
+        }
+
         public void LoadScene(string sceneName, System.Action onLoaded = null)
         {
+            PreviousSceneName = SceneManager.GetActiveScene().name;
+
+            // CRITICAL: Capture all heroes BEFORE the scene unloads!
+            EnsureHeroesRegistered();
+            SavePartyToPlayerPrefs();
+
+            Debug.Log($"[GameManager] LoadScene: Transitioning from '{PreviousSceneName}' to '{sceneName}'. Carrying {ActivePartyRoster.Count} heroes.");
             StartCoroutine(LoadSceneRoutine(sceneName, onLoaded));
+        }
+
+        public void ReturnToPreviousScene()
+        {
+            if (!string.IsNullOrEmpty(PreviousSceneName))
+            {
+                StartCoroutine(LoadSceneRoutine(PreviousSceneName, null));
+            }
+            else
+            {
+                Debug.LogWarning("GameManager: No previous scene to return to!");
+            }
         }
 
         private IEnumerator LoadSceneRoutine(string sceneName, System.Action onLoaded)
