@@ -42,11 +42,13 @@ namespace PixelMindscape.UI
 
         public void SetBatonPassAvailable(bool available)
         {
+            Debug.Log($"[CommandMenuView] SetBatonPassAvailable({available}). batonPassButton assigned: {batonPassButton != null}");
             if (batonPassButton != null) batonPassButton.gameObject.SetActive(available);
         }
 
         public void SetSwitchPersonaAvailable(bool available)
         {
+            Debug.Log($"[CommandMenuView] SetSwitchPersonaAvailable({available}). switchPersonaButton assigned: {switchPersonaButton != null}");
             if (switchPersonaButton != null) switchPersonaButton.gameObject.SetActive(available);
         }
     }

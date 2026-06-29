@@ -126,6 +126,7 @@ namespace PixelMindscape.UI
 
             if (currentCombatant.IsPlayerSide)
             {
+                Debug.Log($"[UICombatPanel] Turn started for player '{currentCombatant.gameObject.name}'. IsProtagonist={currentCombatant.IsProtagonist}, HasSwitchedPersona={currentCombatant.HasSwitchedPersonaThisTurn}, HasOneMore={currentCombatant.HasOneMore}");
                 commandMenu?.SetBatonPassAvailable(currentCombatant.HasOneMore);
                 commandMenu?.SetSwitchPersonaAvailable(currentCombatant.IsProtagonist && !currentCombatant.HasSwitchedPersonaThisTurn);
                 SwitchState(CombatUIState.CommandSelect);

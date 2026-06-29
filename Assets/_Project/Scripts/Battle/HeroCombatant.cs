@@ -59,18 +59,23 @@ namespace PixelMindscape.Battle
 
             if (personaLoadout.Count > 0 && ActivePersonaData == null)
             {
-                SwitchPersona(personaLoadout[0]);
+                SwitchPersona(personaLoadout[0], true);
             }
             
             if (MaxHP <= 0)
                 Debug.LogError($"[HeroCombatant] {gameObject.name} has MaxHP={MaxHP}! Set it to a value > 0.");
         }
 
-        public void SwitchPersona(PersonaData newPersona)
+        public void SwitchPersona(PersonaData newPersona, bool isInitialSetup = false)
         {
             if (newPersona == null || ActivePersonaData == newPersona) return;
             ActivePersonaData = newPersona;
-            HasSwitchedPersonaThisTurn = true;
+            
+            if (!isInitialSetup)
+            {
+                HasSwitchedPersonaThisTurn = true;
+                if (vfxHandler != null) vfxHandler.PlayBatonPassVFX(); // use beautiful vfx flash
+            }
             
             // Recalculate stats based on new Persona
             BaseAttackPower = newPersona.baseStrength * 2;
@@ -85,9 +90,7 @@ namespace PixelMindscape.Battle
                 }
             }
             
-            Debug.Log($"[HeroCombatant] SwitchPersona: {gameObject.name} instantly switched active Persona to {newPersona.displayName}! Loaded {availableSkills.Count} skills.");
-            
-            if (vfxHandler != null) vfxHandler.PlayBatonPassVFX(); // use beautiful vfx flash
+            Debug.Log($"[HeroCombatant] SwitchPersona: {gameObject.name} switched active Persona to {newPersona.displayName} (InitialSetup: {isInitialSetup}). Loaded {availableSkills.Count} skills.");
         }
 
         public override Affinity GetAffinity(Element element)

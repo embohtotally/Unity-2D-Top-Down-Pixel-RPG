@@ -177,6 +177,12 @@ namespace PixelMindscape.Battle
 
                 bool isBatonPass = action is BatonPassAction;
                 
+                // Clear OneMore flag now that the player has chosen an action (Baton Pass or regular action)
+                if (current.HasOneMore)
+                {
+                    current.ClearOneMore();
+                }
+                
                 // Wait for choreographed action coroutine to complete
                 yield return StartCoroutine(action.Execute(this));
                 bool wasWeaknessHit = action.WasWeaknessHit;
@@ -207,7 +213,6 @@ namespace PixelMindscape.Battle
                 // Turn Queue Management
                 if (isBatonPass)
                 {
-                    current.ClearOneMore();               // passer used it
                     turnQueue.Remove(current);
                     if (!current.IsDefeated) turnQueue.Add(current); // back of queue
 
@@ -217,8 +222,7 @@ namespace PixelMindscape.Battle
                 }
                 else if (current.HasOneMore)
                 {
-                    // Combatant gets to go again immediately
-                    current.ClearOneMore();
+                    // Combatant gets to go again immediately! Do NOT clear HasOneMore yet, so UICombatPanel knows Baton Pass is available!
                     // Remains at the front of the queue, do not move to back
                 }
                 else
