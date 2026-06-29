@@ -26,6 +26,8 @@ namespace PixelMindscape.UI
 
         [Header("Feedback UI")]
         [SerializeField] private GameObject oneMoreTextPrefab; // Prefab with TMP_Text saying "1 MORE!"
+        [SerializeField] private GameObject weaknessPopupPrefab; // Big red 'WEAK' text popup
+        [SerializeField] private TurnTimelineBar turnTimelineBar;
 
         public CombatUIState CurrentState { get; private set; } = CombatUIState.Idle;
         private bool isInputLocked = false;
@@ -78,23 +80,50 @@ namespace PixelMindscape.UI
 
         private void HandleOneMoreTriggered(Combatant combatant)
         {
+            Debug.Log($"[UICombatPanel] Weakness hit! Triggering 'WEAK' popup and '1 MORE' for {combatant.gameObject.name}");
+            
+            // 1. Weakness Popup & Fist Pump Animation
+            if (weaknessPopupPrefab != null)
+            {
+                var weakPopup = Instantiate(weaknessPopupPrefab, combatant.transform.position + Vector3.up * 2.5f, Quaternion.identity);
+                weakPopup.transform.localScale = Vector3.zero;
+                weakPopup.transform.DOScale(Vector3.one * 1.5f, 0.3f).SetEase(Ease.OutBack);
+                weakPopup.transform.DOMoveY(weakPopup.transform.position.y + 1f, 1f).SetEase(Ease.OutCubic);
+                var text = weakPopup.GetComponentInChildren<TMPro.TMP_Text>();
+                if (text != null) text.DOFade(0, 1f).SetDelay(0.5f);
+                Destroy(weakPopup, 1.5f);
+            }
+
+            // Quick fist pump / victory animation
+            var animator = combatant.GetComponentInChildren<Animator>();
+            if (animator != null)
+            {
+                animator.SetTrigger("Victory"); // or fist pump
+            }
+
+            // 2. 1 MORE Popup
             if (oneMoreTextPrefab != null)
             {
-                // Spawn it slightly above the combatant
                 var popup = Instantiate(oneMoreTextPrefab, combatant.transform.position + Vector3.up * 1.5f, Quaternion.identity);
-                
-                // Animate it
-                popup.transform.DOMoveY(popup.transform.position.y + 1f, 1f).SetEase(Ease.OutCubic);
+                popup.transform.localScale = Vector3.zero;
+                popup.transform.DOScale(Vector3.one * 1.3f, 0.4f).SetDelay(0.3f).SetEase(Ease.OutBack);
+                popup.transform.DOMoveY(popup.transform.position.y + 1f, 1f).SetDelay(0.3f).SetEase(Ease.OutCubic);
                 var text = popup.GetComponentInChildren<TMPro.TMP_Text>();
-                if (text != null)
-                {
-                    text.DOFade(0, 1f).SetEase(Ease.InExpo);
-                }
-                Destroy(popup, 1.5f);
+                if (text != null) text.DOFade(0, 1f).SetDelay(0.7f);
+                Destroy(popup, 1.8f);
             }
-            else
+
+            // Re-open command menu after delay
+            if (combatant.IsPlayerSide)
             {
-                Debug.Log($"1 MORE for {combatant.name}!");
+                DOVirtual.DelayedCall(1.0f, () => 
+                {
+                    if (commandMenu != null)
+                    {
+                        commandMenu.SetBatonPassAvailable(true);
+                        SwitchState(CombatUIState.CommandSelect);
+                    }
+                });
             }
         }
 
@@ -368,6 +397,12 @@ namespace PixelMindscape.UI
 
         private void HandleTurnOrderChanged()
         {
+            if (turnTimelineBar != null)
+            {
+                turnTimelineBar.Refresh(battleManager.GetTurnQueueSnapshot());
+                return;
+            }
+
             if (turnOrderContainer == null || turnPortraitPrefab == null) return;
 
             // Clear old portraits

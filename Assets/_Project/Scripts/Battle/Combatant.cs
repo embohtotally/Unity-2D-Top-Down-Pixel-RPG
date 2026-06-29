@@ -30,6 +30,11 @@ namespace PixelMindscape.Battle
         [field: SerializeField] public float BatonPassMultiplier { get; protected set; } = 1f;
         public bool HasSwitchedPersonaThisTurn { get; set; }
 
+        public event System.Action<Combatant> OnStatsChanged;
+        public GameObject TargetHighlight { get; set; }
+
+        public void NotifyStatsChanged() => OnStatsChanged?.Invoke(this);
+
         public virtual void OnTurnStartCleanUp()
         {
             IsGuarding = false;
@@ -189,11 +194,14 @@ namespace PixelMindscape.Battle
                 popup.transform.position = targetScreenPos;
                 popup.Setup((int)amount, isHeal);
             }
+
+            OnStatsChanged?.Invoke(this);
         }
 
         public virtual void SpendSP(int amount)
         {
             CurrentSP = Mathf.Max(0, CurrentSP - amount);
+            OnStatsChanged?.Invoke(this);
         }
 
         public virtual void SetDown(bool state)

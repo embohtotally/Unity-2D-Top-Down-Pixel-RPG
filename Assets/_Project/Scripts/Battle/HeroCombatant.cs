@@ -7,6 +7,7 @@ namespace PixelMindscape.Battle
     {
         [Header("Character Data (Optional)")]
         [SerializeField] private CharacterData characterData;
+        public CharacterData CharacterData => characterData;
 
         [Header("Persona Loadout (For Protagonist)")]
         [SerializeField] private System.Collections.Generic.List<PersonaData> personaLoadout = new System.Collections.Generic.List<PersonaData>();
