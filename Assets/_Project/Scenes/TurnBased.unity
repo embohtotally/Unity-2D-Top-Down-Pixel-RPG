@@ -3155,6 +3155,7 @@ GameObject:
   - component: {fileID: 971523527}
   - component: {fileID: 971523525}
   - component: {fileID: 971523528}
+  - component: {fileID: 971523529}
   m_Layer: 0
   m_Name: UICombat
   m_TagString: Untagged
@@ -3183,7 +3184,7 @@ MonoBehaviour:
   turnOrderContainer: {fileID: 732544226}
   turnPortraitPrefab: {fileID: 4584388891861135011, guid: 80c35a4143761d240babefe250036653, type: 3}
   oneMoreTextPrefab: {fileID: 0}
-  personaSelection: {fileID: 0}
+  personaSelection: {fileID: 1033891891}
   availableItems:
   - {fileID: 11400000, guid: 0e8a63f71c190a64b91605648f0280fd, type: 2}
   - {fileID: 11400000, guid: 259993e653ce0b1419bcef417a42e906, type: 2}
@@ -3223,6 +3224,29 @@ MonoBehaviour:
   itemButton: {fileID: 223898336}
   batonPassButton: {fileID: 1006358597}
   switchPersonaButton: {fileID: 275201285}
+--- !u!114 &971523529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971523524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9efa4d4cdcfe742b5b4596e4f6ccc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleManager: {fileID: 0}
+  panelRect: {fileID: 0}
+  commandMenu: {fileID: 0}
+  targetSelection: {fileID: 0}
+  skillSelection: {fileID: 0}
+  itemSelection: {fileID: 0}
+  turnOrderContainer: {fileID: 0}
+  turnPortraitPrefab: {fileID: 0}
+  oneMoreTextPrefab: {fileID: 0}
+  personaSelection: {fileID: 0}
+  availableItems: []
 --- !u!1 &978030529
 GameObject:
   m_ObjectHideFlags: 0
