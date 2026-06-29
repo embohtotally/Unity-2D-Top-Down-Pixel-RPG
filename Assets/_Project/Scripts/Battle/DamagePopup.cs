@@ -25,8 +25,12 @@ namespace PixelMindscape.Battle
             textMesh.SetText(Mathf.Abs(amount).ToString());
             textMesh.color = isHeal ? healColor : damageColor;
 
+            // Check if this is a UI Canvas object or a World Space object
+            bool isUI = GetComponent<RectTransform>() != null && GetComponentInParent<Canvas>()?.renderMode == RenderMode.ScreenSpaceOverlay;
+            float actualDistance = isUI ? floatDistance * 40f : floatDistance;
+
             // Animate floating up
-            transform.DOMoveY(transform.position.y + floatDistance, duration).SetEase(Ease.OutCirc);
+            transform.DOMoveY(transform.position.y + actualDistance, duration).SetEase(Ease.OutCirc);
 
             // Animate fade out
             textMesh.DOFade(0, duration).SetEase(Ease.InExpo).OnComplete(() =>

@@ -98,6 +98,8 @@ namespace PixelMindscape.UI
             }
         }
 
+        [SerializeField] private PersonaSelectionView personaSelection;
+
         public void SwitchState(CombatUIState newState)
         {
             CurrentState = newState;
@@ -107,6 +109,7 @@ namespace PixelMindscape.UI
             targetSelection?.Hide();
             skillSelection?.Hide();
             itemSelection?.Hide();
+            personaSelection?.Hide();
 
             if (isInputLocked) return;
 
@@ -123,6 +126,8 @@ namespace PixelMindscape.UI
 
             if (currentCombatant.IsPlayerSide)
             {
+                commandMenu?.SetBatonPassAvailable(currentCombatant.HasOneMore);
+                commandMenu?.SetSwitchPersonaAvailable(currentCombatant.IsProtagonist && !currentCombatant.HasSwitchedPersonaThisTurn);
                 SwitchState(CombatUIState.CommandSelect);
             }
             else
@@ -224,16 +229,27 @@ namespace PixelMindscape.UI
             if (isInputLocked || battleManager.ActiveCombatant == null) return;
             
             SwitchState(CombatUIState.TargetSelect);
-            var validTargets = battleManager.GetActiveParty();
+            
+            // Filter activeParty to exclude self, defeated, and downed allies
+            var allParty = battleManager.GetActiveParty();
+            var validTargets = new List<Combatant>();
+            foreach (var ally in allParty)
+            {
+                if (ally != battleManager.ActiveCombatant && !ally.IsDefeated && !ally.IsDown)
+                {
+                    validTargets.Add(ally);
+                }
+            }
+            
+            if (validTargets.Count == 0)
+            {
+                Debug.LogWarning("[UICombatPanel] No valid allies available to receive Baton Pass!");
+                SwitchState(CombatUIState.CommandSelect);
+                return;
+            }
             
             targetSelection.Show(validTargets, (target) => 
             {
-                if (target == battleManager.ActiveCombatant)
-                {
-                    Debug.LogWarning("Cannot Baton Pass to yourself!");
-                    SwitchState(CombatUIState.CommandSelect);
-                    return;
-                }
                 isInputLocked = true;
                 SwitchState(CombatUIState.Idle);
                 battleManager.SubmitAction(new BatonPassAction 
@@ -250,8 +266,33 @@ namespace PixelMindscape.UI
 
         private void HandleSwitchPersonaSelected()
         {
-            if (isInputLocked) return;
-            Debug.LogWarning("Switch Persona UI is not fully implemented.");
+            if (isInputLocked || battleManager.ActiveCombatant == null) return;
+            
+            var hero = battleManager.ActiveCombatant as HeroCombatant;
+            if (hero == null || !hero.IsProtagonist || hero.HasSwitchedPersonaThisTurn) 
+            {
+                Debug.LogWarning("Switch Persona is not available for this combatant right now.");
+                return;
+            }
+
+            if (personaSelection != null)
+            {
+                SwitchState(CombatUIState.SkillSelect); // use skill select enum state to hide other menus
+                personaSelection.Show(hero.GetPersonaLoadout(), (selectedPersona) => 
+                {
+                    hero.SwitchPersona(selectedPersona);
+                    commandMenu?.SetSwitchPersonaAvailable(false); // Disabled for rest of turn
+                    SwitchState(CombatUIState.CommandSelect); // Return to command select immediately without advancing turn!
+                }, 
+                () => 
+                {
+                    SwitchState(CombatUIState.CommandSelect);
+                });
+            }
+            else
+            {
+                Debug.LogWarning("PersonaSelectionView is not assigned in the Inspector!");
+            }
         }
 
         private void OnPlayerSelectsAttack(Combatant target)

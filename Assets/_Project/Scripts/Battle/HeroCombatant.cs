@@ -5,7 +5,13 @@ namespace PixelMindscape.Battle
 {
     public class HeroCombatant : Combatant
     {
-        [Header("Hero Initial Stats")]
+        [Header("Character Data (Optional)")]
+        [SerializeField] private CharacterData characterData;
+
+        [Header("Persona Loadout (For Protagonist)")]
+        [SerializeField] private System.Collections.Generic.List<PersonaData> personaLoadout = new System.Collections.Generic.List<PersonaData>();
+
+        [Header("Hero Initial Stats (Fallback)")]
         [SerializeField] private int startingHP = 100;
         [SerializeField] private int startingSP = 50;
         [SerializeField] private int baseAttack = 15;
@@ -16,6 +22,9 @@ namespace PixelMindscape.Battle
         [SerializeField] private Element strongAgainst;
         [SerializeField] private Element weakAgainst;
 
+        public PersonaData ActivePersonaData { get; private set; }
+        public System.Collections.Generic.List<PersonaData> GetPersonaLoadout() => personaLoadout;
+
         private void Awake()
         {
             InitializeStats();
@@ -24,19 +33,61 @@ namespace PixelMindscape.Battle
         public override void InitializeStats()
         {
             IsPlayerSide = true;
-            MaxHP = startingHP;
-            CurrentHP = startingHP;
-            MaxSP = startingSP;
-            CurrentSP = startingSP;
-            BaseAttackPower = baseAttack;
-            EffectiveAgility = agility;
             IsDefeated = false;
             IsDown = false;
+
+            if (characterData != null)
+            {
+                MaxHP = characterData.baseHP;
+                CurrentHP = characterData.baseHP;
+                MaxSP = characterData.baseSP;
+                CurrentSP = characterData.baseSP;
+                BaseAttackPower = characterData.baseStrength * 2; // derived attack
+                EffectiveAgility = characterData.baseAgility;
+                Debug.Log($"[HeroCombatant] InitializeStats: '{gameObject.name}' loaded stats from CharacterData '{characterData.displayName}' => HP={CurrentHP}/{MaxHP}, SP={CurrentSP}/{MaxSP}");
+            }
+            else
+            {
+                MaxHP = startingHP;
+                CurrentHP = startingHP;
+                MaxSP = startingSP;
+                CurrentSP = startingSP;
+                BaseAttackPower = baseAttack;
+                EffectiveAgility = agility;
+                Debug.Log($"[HeroCombatant] InitializeStats: '{gameObject.name}' has no CharacterData assigned. Using fallback test stats => HP={CurrentHP}/{MaxHP}, SP={CurrentSP}/{MaxSP}");
+            }
+
+            if (personaLoadout.Count > 0 && ActivePersonaData == null)
+            {
+                SwitchPersona(personaLoadout[0]);
+            }
             
-            if (startingHP <= 0)
-                Debug.LogError($"[HeroCombatant] {gameObject.name} has startingHP={startingHP} in the Inspector! Set it to a value > 0.");
+            if (MaxHP <= 0)
+                Debug.LogError($"[HeroCombatant] {gameObject.name} has MaxHP={MaxHP}! Set it to a value > 0.");
+        }
+
+        public void SwitchPersona(PersonaData newPersona)
+        {
+            if (newPersona == null || ActivePersonaData == newPersona) return;
+            ActivePersonaData = newPersona;
+            HasSwitchedPersonaThisTurn = true;
             
-            Debug.Log($"[HeroCombatant] InitializeStats: {gameObject.name} => HP={CurrentHP}/{MaxHP}, IsDefeated={IsDefeated}");
+            // Recalculate stats based on new Persona
+            BaseAttackPower = newPersona.baseStrength * 2;
+            EffectiveAgility = newPersona.baseAgility;
+
+            availableSkills.Clear();
+            if (newPersona.innateSkillsByLevel != null)
+            {
+                foreach (var entry in newPersona.innateSkillsByLevel)
+                {
+                    if (entry.skill != null) availableSkills.Add(entry.skill);
+                }
+            }
+            
+            Debug.Log($"[HeroCombatant] SwitchPersona: {gameObject.name} instantly switched active Persona to {newPersona.displayName}! Loaded {availableSkills.Count} skills.");
+            
+            if (vfxHandler != null) vfxHandler.PlayBatonPassVFX(); // use beautiful vfx flash
         }
 
         public override Affinity GetAffinity(Element element)
@@ -54,13 +105,15 @@ namespace PixelMindscape.Battle
             }
             else
             {
-                return baseMagic;
+                if (ActivePersonaData != null) return ActivePersonaData.baseMagic * 2;
+                return characterData != null ? characterData.baseMagic * 2 : baseMagic;
             }
         }
 
         public override int GetDefenseStatFor(Element element)
         {
-            return 10; // Placeholder defense
+            if (ActivePersonaData != null) return ActivePersonaData.baseEndurance * 2;
+            return characterData != null ? characterData.baseEndurance * 2 : 10;
         }
 
         [Header("Hero Skills")]

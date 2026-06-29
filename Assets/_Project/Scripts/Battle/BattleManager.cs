@@ -207,11 +207,13 @@ namespace PixelMindscape.Battle
                 // Turn Queue Management
                 if (isBatonPass)
                 {
-                    // Baton pass removes current combatant's extra turn.
-                    // The receiver was already moved to front in PerformBatonPass.
-                    current.ClearOneMore();
+                    current.ClearOneMore();               // passer used it
                     turnQueue.Remove(current);
-                    if (!current.IsDefeated) turnQueue.Add(current);
+                    if (!current.IsDefeated) turnQueue.Add(current); // back of queue
+
+                    // The target was already placed at front by PerformBatonPass
+                    // The target has HasOneMore, so they will act next.
+                    // Chain count stays incremented; reset it if an enemy acts.
                 }
                 else if (current.HasOneMore)
                 {

@@ -8,7 +8,7 @@ namespace PixelMindscape.UI
 {
     public class TargetSelectionView : MonoBehaviour
     {
-        [Header("UI (Optional)")]
+        [Header("UI Prompt")]
         [SerializeField] private GameObject selectionPanel; // E.g., a panel that says "Select Target!"
         [SerializeField] private Button cancelButton; // Manual cancel button
 
@@ -34,7 +34,10 @@ namespace PixelMindscape.UI
             onTargetSelectedCallback = onSelected;
             onCancelledCallback = onCancel;
             isSelecting = true;
+            
             if (selectionPanel != null) selectionPanel.SetActive(true);
+
+            Debug.Log($"[TargetSelectionView] Ready for sprite raycast selection. Valid targets count: {(targets != null ? targets.Count : 0)}");
         }
 
         public void Hide()
@@ -65,52 +68,75 @@ namespace PixelMindscape.UI
 
         private void HandleRaycastSelection()
         {
-            // 1. FIRST check Canvas UI Raycast (if enemies exist on or are tracked via the Canvas UI)
-            if (EventSystem.current != null)
+            if (mainCamera == null) mainCamera = Camera.main;
+
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            
+            // 1. FIRST check Physics2D perspective ray intersection (flawless for Perspective & Orthographic cameras hitting 2D colliders)
+            RaycastHit2D hit2D = Physics2D.GetRayIntersection(ray, Mathf.Infinity, targetLayerMask);
+            Collider hitCollider = null;
+            Collider2D hitCollider2D = hit2D.collider;
+
+            // 2. SECOND check 3D Physics raycast (if the user added 3D BoxColliders in their perspective scene)
+            if (hitCollider2D == null)
             {
-                PointerEventData eventData = new PointerEventData(EventSystem.current)
+                if (Physics.Raycast(ray, out RaycastHit hit3D, Mathf.Infinity, targetLayerMask))
                 {
-                    position = Input.mousePosition
-                };
-                List<RaycastResult> results = new List<RaycastResult>();
-                EventSystem.current.RaycastAll(eventData, results);
-
-                foreach (RaycastResult result in results)
-                {
-                    Combatant uiTarget = result.gameObject.GetComponentInParent<Combatant>();
-                    if (uiTarget == null) uiTarget = result.gameObject.GetComponentInChildren<Combatant>();
-
-                    if (uiTarget != null && validTargets != null && validTargets.Contains(uiTarget) && !uiTarget.IsDefeated)
-                    {
-                        var callback = onTargetSelectedCallback;
-                        Hide();
-                        callback?.Invoke(uiTarget);
-                        return; // Successfully selected via Canvas UI Raycast
-                    }
+                    hitCollider = hit3D.collider;
                 }
             }
 
-            // 2. SECOND check Physics2D Raycast (if enemies are in the 2D World Space)
-            if (mainCamera == null) mainCamera = Camera.main;
+            GameObject hitObj = hitCollider2D != null ? hitCollider2D.gameObject : (hitCollider != null ? hitCollider.gameObject : null);
 
-            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            // Raycast at the mouse position to check for 2D colliders
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, targetLayerMask);
-
-            if (hit.collider != null)
+            if (hitObj != null)
             {
-                Combatant target = hit.collider.GetComponentInParent<Combatant>();
-                
-                if (target == null)
-                    target = hit.collider.GetComponentInChildren<Combatant>();
+                Debug.Log($"[TargetSelectionView] Raycast clicked. Hit Collider on: {hitObj.name}");
 
-                // Check if we hit a combatant, if it's in our valid list, and it's not dead.
-                if (target != null && validTargets != null && validTargets.Contains(target) && !target.IsDefeated)
+                Combatant target = hitObj.GetComponentInParent<Combatant>();
+                if (target == null) target = hitObj.GetComponentInChildren<Combatant>();
+
+                if (target != null)
                 {
-                    var callback = onTargetSelectedCallback;
-                    Hide();
-                    callback?.Invoke(target);
+                    bool isValid = false;
+                    if (validTargets != null && validTargets.Contains(target))
+                    {
+                        isValid = true;
+                    }
+                    else if (validTargets != null && validTargets.Count > 0)
+                    {
+                        bool seekingAlly = validTargets[0].IsPlayerSide;
+                        if (target.IsPlayerSide == seekingAlly)
+                        {
+                            Debug.Log($"[TargetSelectionView] Target '{target.gameObject.name}' wasn't explicitly in validTargets list, but matches the required side (IsPlayerSide={target.IsPlayerSide}). Accepting!");
+                            isValid = true;
+                        }
+                    }
+                    else if (validTargets == null || validTargets.Count == 0)
+                    {
+                        Debug.Log($"[TargetSelectionView] validTargets list was empty, accepting clicked target '{target.gameObject.name}' as fallback.");
+                        isValid = true;
+                    }
+
+                    if (isValid)
+                    {
+                        Debug.Log($"[TargetSelectionView] Successfully selected valid target sprite: {target.gameObject.name}");
+                        var callback = onTargetSelectedCallback;
+                        Hide();
+                        callback?.Invoke(target);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[TargetSelectionView] Clicked on combatant '{target.gameObject.name}' (IsPlayerSide={target.IsPlayerSide}), but this action requires targets on the opposite side!");
+                    }
                 }
+                else
+                {
+                    Debug.LogWarning($"[TargetSelectionView] Clicked on collider '{hitObj.name}', but no Combatant script was found on it or its parent/children.");
+                }
+            }
+            else
+            {
+                Debug.Log($"[TargetSelectionView] Clicked at {Input.mousePosition}, but no 2D/3D Collider was hit. Ensure your character sprites have a BoxCollider2D/BoxCollider attached and match the TargetLayerMask.");
             }
         }
 

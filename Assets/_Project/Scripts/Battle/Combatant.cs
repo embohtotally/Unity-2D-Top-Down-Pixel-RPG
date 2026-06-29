@@ -12,6 +12,7 @@ namespace PixelMindscape.Battle
         public Sprite TurnPortrait; // Assign an icon for the Turn Order UI
 
         public bool IsPlayerSide;
+        public bool IsProtagonist;
         [field: SerializeField] public int EffectiveAgility { get; protected set; }
         [field: SerializeField] public bool IsDown { get; protected set; }
         [field: SerializeField] public bool IsDefeated { get; protected set; }
@@ -26,10 +27,12 @@ namespace PixelMindscape.Battle
         [field: SerializeField] public int BaseAttackPower { get; protected set; }
         [field: SerializeField] public bool IsGuarding { get; protected set; }
         [field: SerializeField] public float BatonPassMultiplier { get; protected set; } = 1f;
+        public bool HasSwitchedPersonaThisTurn { get; set; }
 
         public virtual void OnTurnStartCleanUp()
         {
             IsGuarding = false;
+            HasSwitchedPersonaThisTurn = false;
         }
 
         public virtual void OnTurnEndCleanUp()
@@ -156,32 +159,33 @@ namespace PixelMindscape.Battle
 
                 var popup = Instantiate(BattleManager.Instance.DamagePopupPrefab, parentTransform);
                 
-                // Position the popup correctly based on Canvas render mode
-                if (canvasObj != null)
+                Vector3 targetScreenPos = Vector3.zero;
+
+                if (Camera.main != null)
                 {
-                    Canvas canvas = canvasObj.GetComponent<Canvas>();
-                    if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                    // If we have an hpSlider, use its exact screen position as a perfect anchor!
+                    if (hpSlider != null)
                     {
-                        // If the combatant is a world space object (not on a canvas), convert world to screen point
-                        if (GetComponentInParent<Canvas>() == null && Camera.main != null)
-                        {
-                            popup.transform.position = Camera.main.WorldToScreenPoint(transform.position);
-                        }
-                        else
-                        {
-                            popup.transform.position = transform.position;
-                        }
+                        targetScreenPos = hpSlider.transform.position + new Vector3(0, 80f, 0);
                     }
                     else
                     {
-                        popup.transform.position = transform.position;
+                        // Convert world position to screen point
+                        targetScreenPos = Camera.main.WorldToScreenPoint(transform.position);
+
+                        // If the world position was (0,0,0) or unaligned, use explicit Left/Right screen halves based on IsPlayerSide!
+                        if (transform.position.sqrMagnitude < 0.1f)
+                        {
+                            targetScreenPos = Camera.main.ViewportToScreenPoint(IsPlayerSide ? new Vector3(0.25f, 0.6f, 0) : new Vector3(0.75f, 0.6f, 0));
+                        }
                     }
                 }
                 else
                 {
-                    popup.transform.position = transform.position;
+                    targetScreenPos = transform.position;
                 }
 
+                popup.transform.position = targetScreenPos;
                 popup.Setup((int)amount, isHeal);
             }
         }

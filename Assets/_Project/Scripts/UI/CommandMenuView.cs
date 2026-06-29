@@ -39,5 +39,15 @@ namespace PixelMindscape.UI
         {
             if (menuPanel != null) menuPanel.SetActive(false);
         }
+
+        public void SetBatonPassAvailable(bool available)
+        {
+            if (batonPassButton != null) batonPassButton.gameObject.SetActive(available);
+        }
+
+        public void SetSwitchPersonaAvailable(bool available)
+        {
+            if (switchPersonaButton != null) switchPersonaButton.gameObject.SetActive(available);
+        }
     }
 }
