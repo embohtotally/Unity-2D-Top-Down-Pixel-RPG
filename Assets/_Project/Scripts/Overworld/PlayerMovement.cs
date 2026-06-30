@@ -42,15 +42,17 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat(verticalHash, 0f);
     }
 
-    private void OnEnable()
+    private void Awake()
     {
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
+
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
     {
@@ -63,22 +65,51 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // We returned to the Overworld! Re-enable movement, unlock cutscene mode, and move back to active scene hierarchy!
+            // ═══════════════════════════════════════════════════════
+            // CRITICAL: Force-restore EVERY state that blocks movement
+            // ═══════════════════════════════════════════════════════
+
+            // FIX 1: Time.timeScale — NPCInteraction sets this to 0 when dialogue starts.
+            // If the battle was triggered MID-DIALOGUE (via Fungus StartBattleCommand),
+            // the NPC's EndDialogue() never ran, so timeScale is permanently stuck at 0.
+            // FixedUpdate() simply does not execute when timeScale == 0.
+            if (Time.timeScale < 0.01f)
+            {
+                Debug.LogWarning($"[PlayerMovement] Time.timeScale was {Time.timeScale} on Overworld return! Forcing to 1.0.");
+                Time.timeScale = 1f;
+            }
+
+            // FIX 2: CutsceneDirector.IsCutscenePlaying — blocks FixedUpdate via early return
+            if (PixelMindscape.Core.CutsceneDirector.Instance != null)
+            {
+                if (PixelMindscape.Core.CutsceneDirector.Instance.IsCutscenePlaying)
+                {
+                    Debug.LogWarning("[PlayerMovement] CutsceneDirector was still playing on Overworld return! Forcing EndCutscene.");
+                }
+                PixelMindscape.Core.CutsceneDirector.Instance.EndCutscene();
+            }
+
+            // FIX 3: Re-enable this script and clear all lock flags
             this.enabled = true;
             CutsceneMode = false;
             overrideMovement = Vector2.zero;
-
-            if (PixelMindscape.Core.CutsceneDirector.Instance != null)
-            {
-                PixelMindscape.Core.CutsceneDirector.Instance.EndCutscene();
-            }
 
             // Move out of DontDestroyOnLoad back into the active Overworld scene hierarchy!
             if (gameObject.scene.name == "DontDestroyOnLoad")
             {
                 UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(gameObject, scene);
-                Debug.Log($"[PlayerMovement] Returned to Overworld '{scene.name}'. Re-enabled PlayerMovement & moved to active scene.");
+
+                // FIX 4: Restore pre-battle position so we don't spawn inside a wall
+                if (PixelMindscape.Core.GameManager.Instance != null && PixelMindscape.Core.GameManager.Instance.HasSavedOverworldPosition)
+                {
+                    transform.position = PixelMindscape.Core.GameManager.Instance.LastOverworldPosition;
+                    if (rb2D != null) rb2D.position = transform.position;
+                    PixelMindscape.Core.GameManager.Instance.HasSavedOverworldPosition = false;
+                    Debug.Log($"[PlayerMovement] Restored overworld position to {transform.position}.");
+                }
             }
+
+            Debug.Log($"[PlayerMovement] Returned to Overworld '{scene.name}'. enabled={this.enabled}, CutsceneMode={CutsceneMode}, timeScale={Time.timeScale}, rb2D={(rb2D != null ? "OK" : "NULL")}");
         }
     }
 
@@ -137,13 +168,22 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // Calculate new physics position
-        Vector2 targetPosition = rb2D.position + movement * moveSpeed * Time.fixedDeltaTime;
-        
-        // Clamp position safely within the physics engine
-        targetPosition.x = Mathf.Clamp(targetPosition.x, minBounds.x, maxBounds.x);
-        targetPosition.y = Mathf.Clamp(targetPosition.y, minBounds.y, maxBounds.y);
+        if (rb2D != null)
+        {
+            // linearVelocity handles collisions perfectly without getting stuck like MovePosition
+            rb2D.linearVelocity = movement * moveSpeed;
 
-        rb2D.MovePosition(targetPosition);
+            // Optional: Hard clamp to map bounds if necessary (though invisible wall colliders are better)
+            Vector2 pos = rb2D.position;
+            bool clamped = false;
+            
+            if (pos.x < minBounds.x || pos.x > maxBounds.x) { pos.x = Mathf.Clamp(pos.x, minBounds.x, maxBounds.x); clamped = true; }
+            if (pos.y < minBounds.y || pos.y > maxBounds.y) { pos.y = Mathf.Clamp(pos.y, minBounds.y, maxBounds.y); clamped = true; }
+            
+            if (clamped)
+            {
+                rb2D.position = pos;
+            }
+        }
     }
 }

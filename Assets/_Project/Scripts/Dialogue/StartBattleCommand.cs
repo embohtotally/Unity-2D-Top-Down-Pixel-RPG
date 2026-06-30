@@ -13,18 +13,27 @@ namespace PixelMindscape.Dialogue
         [Tooltip("The name of the scene to load (e.g., 'Battle_Standard').")]
         public string battleSceneName = "Battle_Standard";
 
-        [Tooltip("The enemy prefab to spawn for this battle (e.g. Slime).")]
-        public GameObject enemyPrefab;
+        [Tooltip("The list of enemy prefabs to spawn for this battle (e.g. Slime, Slime).")]
+        public System.Collections.Generic.List<GameObject> enemyPrefabs = new System.Collections.Generic.List<GameObject>();
 
         public override void OnEnter()
         {
             if (GameManager.Instance != null)
             {
-                if (enemyPrefab != null)
+                GameManager.Instance.PendingEnemyPrefabs.Clear();
+                if (enemyPrefabs != null && enemyPrefabs.Count > 0)
                 {
-                    GameManager.Instance.PendingEnemyPrefab = enemyPrefab;
+                    GameManager.Instance.PendingEnemyPrefabs.AddRange(enemyPrefabs);
                 }
                 
+                // Save the player's exact overworld position before they get teleported to a Battle Slot
+                var playerObj = GameObject.FindWithTag("Player") ?? GameObject.Find("Player") ?? GameObject.Find("Player_Overworld");
+                if (playerObj != null)
+                {
+                    GameManager.Instance.LastOverworldPosition = playerObj.transform.position;
+                    GameManager.Instance.HasSavedOverworldPosition = true;
+                }
+
                 // Fungus won't continue executing because the scene is unloading
                 GameManager.Instance.LoadScene(battleSceneName);
             }

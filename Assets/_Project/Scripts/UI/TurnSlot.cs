@@ -33,6 +33,15 @@ namespace PixelMindscape.UI
                 {
                     portraitImage.sprite = combatant.TurnPortrait;
                 }
+                else
+                {
+                    // Ultimate Fallback: Grab the raw sprite currently displaying on the combatant's body!
+                    var spriteRenderer = combatant.GetComponentInChildren<SpriteRenderer>();
+                    if (spriteRenderer != null && spriteRenderer.sprite != null)
+                    {
+                        portraitImage.sprite = spriteRenderer.sprite;
+                    }
+                }
             }
 
             if (backgroundRing != null)

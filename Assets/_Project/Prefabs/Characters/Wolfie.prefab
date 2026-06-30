@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3485013192545436007}
   - component: {fileID: 2420165713914572573}
   m_Layer: 0
-  m_Name: Slime
+  m_Name: Wolfie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,8 +77,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 2573423043022198068, guid: 49f921105b01d2e438aef4e40c872f22, type: 3}
+  m_SortingOrder: 13
+  m_Sprite: {fileID: 174749472885532484, guid: e8f7a5c1ed6825040bee1875727a7414, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -127,7 +127,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.04, y: 0.78}
+    oldSize: {x: 2.13, y: 1.61}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07ea185a89b45c4980d2aa622eb340b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TurnPortrait: {fileID: -2204924025881787538, guid: 726f5a12f1dbaad4daef15bfd77d103c, type: 3}
+  TurnPortrait: {fileID: 5681864293646447376, guid: 5e55b502f255f8f45a94e3d2b7b8c3a7, type: 3}
   IsPlayerSide: 0
   IsProtagonist: 0
   <EffectiveAgility>k__BackingField: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   <BaseAttackPower>k__BackingField: 0
   <IsGuarding>k__BackingField: 0
   <BatonPassMultiplier>k__BackingField: 1
-  enemyData: {fileID: 11400000, guid: 4a034b12577bd424eb4c93ac8e636b9e, type: 2}
+  enemyData: {fileID: 11400000, guid: 56b3b9ddca416dd4f94a7b9846ad9baa, type: 2}
   startingHP: 1111
   startingSP: 20
   baseAttack: 10

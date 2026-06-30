@@ -194,19 +194,36 @@ namespace PixelMindscape.Battle
             }
 
             // ═══════════════════════════════════════════════════════
-            // STEP 3: Handle pending enemy prefab from Fungus
+            // STEP 3: Handle pending enemy prefabs from Fungus
             // ═══════════════════════════════════════════════════════
-            if (GameManager.Instance != null && GameManager.Instance.PendingEnemyPrefab != null)
+            if (GameManager.Instance != null && GameManager.Instance.PendingEnemyPrefabs != null && GameManager.Instance.PendingEnemyPrefabs.Count > 0)
             {
-                Debug.Log($"[BattleManager] Spawning pending enemy prefab '{GameManager.Instance.PendingEnemyPrefab.name}' from Fungus!");
+                Debug.Log($"[BattleManager] Spawning {GameManager.Instance.PendingEnemyPrefabs.Count} pending enemy prefabs from Fungus!");
                 foreach (Transform child in enemiesContainer)
                 {
                     child.gameObject.SetActive(false);
                 }
 
-                GameObject spawnedEnemy = Instantiate(GameManager.Instance.PendingEnemyPrefab, enemiesContainer);
-                spawnedEnemy.name = GameManager.Instance.PendingEnemyPrefab.name;
-                GameManager.Instance.PendingEnemyPrefab = null;
+                int enemyCount = GameManager.Instance.PendingEnemyPrefabs.Count;
+                float spacing = 2.0f; // Horizontal distance between enemies
+                float startX = -(enemyCount - 1) * spacing / 2f; // Center them around 0 offset
+
+                for (int i = 0; i < enemyCount; i++)
+                {
+                    GameObject prefab = GameManager.Instance.PendingEnemyPrefabs[i];
+                    if (prefab != null)
+                    {
+                        GameObject spawnedEnemy = Instantiate(prefab, enemiesContainer);
+                        
+                        // Give them unique names if they are identical (e.g. "Slime A", "Slime B")
+                        char suffix = (char)('A' + i);
+                        spawnedEnemy.name = enemyCount > 1 ? $"{prefab.name} {suffix}" : prefab.name;
+
+                        // Space them out horizontally so they don't overlap
+                        spawnedEnemy.transform.localPosition = new Vector3(startX + (i * spacing), 0, 0);
+                    }
+                }
+                GameManager.Instance.PendingEnemyPrefabs.Clear();
             }
 
             var enemies = new List<Combatant>(enemiesContainer.GetComponentsInChildren<Combatant>(true));

@@ -52,9 +52,18 @@ namespace PixelMindscape.Core
             }
         }
 
-        public string PreviousSceneName { get; private set; }
-        public bool LastBattleWon { get; set; }
-        public GameObject PendingEnemyPrefab { get; set; }
+        [Header("Scene Transition State")]
+        public Vector3 LastOverworldPosition { get; set; }
+        public bool HasSavedOverworldPosition { get; set; }
+
+        [field: SerializeField] public string PreviousSceneName { get; private set; }
+        [field: SerializeField] public bool LastBattleWon { get; set; }
+        [field: SerializeField] public System.Collections.Generic.List<GameObject> PendingEnemyPrefabs { get; set; } = new System.Collections.Generic.List<GameObject>();
+
+        [Header("Party Management")]
+        [Tooltip("Add prefabs for allies who don't exist in the overworld. They will be dynamically spawned into battle!")]
+        [SerializeField] private List<GameObject> unlockedPartyPrefabs = new List<GameObject>();
+        public List<GameObject> UnlockedPartyPrefabs => unlockedPartyPrefabs;
 
         public List<MonoBehaviour> ActivePartyRoster { get; private set; } = new List<MonoBehaviour>();
 
@@ -89,6 +98,19 @@ namespace PixelMindscape.Core
             Debug.Log($"[GameManager] EnsureHeroesRegistered complete. ActivePartyRoster size: {ActivePartyRoster.Count}");
         }
 
+        public void CleanUpInvisibleAllies()
+        {
+            foreach (var hero in ActivePartyRoster.ToArray())
+            {
+                if (hero != null && hero.gameObject.name.Contains("(InvisibleAlly)"))
+                {
+                    ActivePartyRoster.Remove(hero);
+                    Destroy(hero.gameObject);
+                }
+            }
+            Debug.Log("[GameManager] Cleaned up invisible allies upon returning to overworld.");
+        }
+
         public void SavePartyToPlayerPrefs()
         {
             PlayerPrefs.SetInt("Hero_Count", ActivePartyRoster.Count);
@@ -107,7 +129,10 @@ namespace PixelMindscape.Core
                 PlayerPrefs.SetInt($"Hero_{i}_MaxHP", maxHP);
                 PlayerPrefs.SetInt($"Hero_{i}_CurrentSP", curSP);
                 PlayerPrefs.SetInt($"Hero_{i}_MaxSP", maxSP);
-                PlayerPrefs.SetString($"Hero_{i}_Name", hero.gameObject.name);
+                
+                // Remove the "(InvisibleAlly)" tag when saving the name
+                string rawName = hero.gameObject.name.Replace("(InvisibleAlly)", "");
+                PlayerPrefs.SetString($"Hero_{i}_Name", rawName);
             }
             PlayerPrefs.Save();
             Debug.Log($"[GameManager] SavePartyToPlayerPrefs: Persistently saved {ActivePartyRoster.Count} heroes to PlayerPrefs.");
@@ -119,6 +144,115 @@ namespace PixelMindscape.Core
 
             // CRITICAL: Capture all heroes BEFORE the scene unloads!
             EnsureHeroesRegistered();
+
+            // Spawn invisible allies ONLY when going TO battle!
+            if (sceneName.Contains("Battle"))
+            {
+                foreach (var prefab in unlockedPartyPrefabs)
+                {
+                    if (prefab == null) continue;
+
+                    // SAFETY: Check if this character already exists in ActivePartyRoster
+                    // (e.g. the protagonist is already registered from the overworld).
+                    // HeroCombatant.Awake() has a static duplicate guard that will Destroy()
+                    // any second instance with the same characterId, which would silently
+                    // lose the registration. So we skip spawning entirely.
+                    bool alreadyInParty = false;
+                    // Get the characterId from the prefab's HeroCombatant
+                    string prefabCharId = null;
+                    var prefabMbs = prefab.GetComponents<MonoBehaviour>();
+                    foreach (var pmb in prefabMbs)
+                    {
+                        if (pmb != null && pmb.GetType().Name == "HeroCombatant")
+                        {
+                            var charDataField = pmb.GetType().GetField("characterData", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                            if (charDataField != null)
+                            {
+                                var charData = charDataField.GetValue(pmb);
+                                if (charData != null)
+                                {
+                                    var idProp = charData.GetType().GetField("characterId", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                                    if (idProp != null) prefabCharId = idProp.GetValue(charData) as string;
+                                }
+                            }
+                            // Fallback: use prefab name
+                            if (string.IsNullOrEmpty(prefabCharId)) prefabCharId = prefab.name;
+                            break;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(prefabCharId))
+                    {
+                        foreach (var existing in ActivePartyRoster)
+                        {
+                            if (existing == null) continue;
+                            string existingId = null;
+                            var eType = existing.GetType();
+                            if (eType.Name == "HeroCombatant")
+                            {
+                                var eCharDataField = eType.GetField("characterData", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                                if (eCharDataField != null)
+                                {
+                                    var eCharData = eCharDataField.GetValue(existing);
+                                    if (eCharData != null)
+                                    {
+                                        var eIdProp = eCharData.GetType().GetField("characterId", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                                        if (eIdProp != null) existingId = eIdProp.GetValue(eCharData) as string;
+                                    }
+                                }
+                                if (string.IsNullOrEmpty(existingId)) existingId = existing.gameObject.name;
+                            }
+                            if (prefabCharId == existingId)
+                            {
+                                alreadyInParty = true;
+                                Debug.Log($"[GameManager] Skipping prefab '{prefab.name}' — character '{prefabCharId}' is already in ActivePartyRoster.");
+                                break;
+                            }
+                        }
+                    }
+
+                    if (alreadyInParty) continue;
+
+                    var instance = Instantiate(prefab);
+                    instance.name = prefab.name + "(InvisibleAlly)";
+                    DontDestroyOnLoad(instance);
+                    
+                    // We must load their stats immediately so they don't overwrite PlayerPrefs with defaults!
+                    MonoBehaviour heroCombatant = null;
+                    var allMbs = instance.GetComponents<MonoBehaviour>();
+                    foreach (var mb in allMbs)
+                    {
+                        if (mb != null && mb.GetType().Name == "HeroCombatant")
+                        {
+                            heroCombatant = mb;
+                            break;
+                        }
+                    }
+
+                    if (heroCombatant != null)
+                    {
+                        var type = heroCombatant.GetType();
+                        int i = ActivePartyRoster.Count;
+                        
+                        int curHP = PlayerPrefs.GetInt($"Hero_{i}_CurrentHP", -1);
+                        if (curHP != -1)
+                        {
+                            int maxHP = PlayerPrefs.GetInt($"Hero_{i}_MaxHP", 100);
+                            int curSP = PlayerPrefs.GetInt($"Hero_{i}_CurrentSP", 50);
+                            int maxSP = PlayerPrefs.GetInt($"Hero_{i}_MaxSP", 50);
+                            
+                            var method = type.GetMethod("OverrideStatsFromSave");
+                            if (method != null) method.Invoke(heroCombatant, new object[] { curHP, maxHP, curSP, maxSP });
+                        }
+                        RegisterHero(heroCombatant);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[GameManager] Prefab {prefab.name} in UnlockedPartyPrefabs does not have a HeroCombatant script!");
+                    }
+                }
+            }
+
             SavePartyToPlayerPrefs();
 
             Debug.Log($"[GameManager] LoadScene: Transitioning from '{PreviousSceneName}' to '{sceneName}'. Carrying {ActivePartyRoster.Count} heroes.");
@@ -129,6 +263,11 @@ namespace PixelMindscape.Core
         {
             if (!string.IsNullOrEmpty(PreviousSceneName))
             {
+                // CRITICAL: Capture battle stats and save them before destroying the allies!
+                EnsureHeroesRegistered();
+                SavePartyToPlayerPrefs();
+                CleanUpInvisibleAllies();
+
                 StartCoroutine(LoadSceneRoutine(PreviousSceneName, null));
             }
             else

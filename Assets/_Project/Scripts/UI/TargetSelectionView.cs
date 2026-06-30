@@ -70,6 +70,29 @@ namespace PixelMindscape.UI
 
             if (validTargets != null && validTargets.Count > 0)
             {
+                // Instantiate and show pulsing highlights for ALL valid targets simultaneously!
+                foreach (var target in validTargets)
+                {
+                    if (target.TargetHighlight == null)
+                    {
+                        CreateHighlightForTarget(target);
+                    }
+                    if (target.TargetHighlight != null)
+                    {
+                        target.TargetHighlight.SetActive(true);
+                        target.TargetHighlight.transform.DOKill();
+                        target.TargetHighlight.transform.localScale = Vector3.one * 1.2f;
+                        target.TargetHighlight.transform.DOScale(Vector3.one * 1.6f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+                        
+                        var fillImg = target.TargetHighlight.transform.Find("Fill")?.GetComponent<Image>();
+                        if (fillImg != null)
+                        {
+                            fillImg.color = new Color(1f, 0.8f, 0.1f, 0.8f); // Bright Gold
+                            fillImg.fillAmount = target.MaxHP > 0 ? (float)target.CurrentHP / target.MaxHP : 1f;
+                        }
+                    }
+                }
+
                 selectedIndex = 0;
                 SelectTargetIndex(selectedIndex);
             }
@@ -77,21 +100,104 @@ namespace PixelMindscape.UI
             Debug.Log($"[TargetSelectionView] Ready for target selection (Controller & Raycast). Valid targets count: {(targets != null ? targets.Count : 0)}");
         }
 
+        private static Sprite cachedRingSprite;
+        private Sprite GetRingSprite()
+        {
+            if (cachedRingSprite != null) return cachedRingSprite;
+            int radius = 64;
+            int thickness = 12;
+            Texture2D texture = new Texture2D(radius * 2, radius * 2);
+            Color[] colors = new Color[texture.width * texture.height];
+            for (int y = 0; y < texture.height; y++)
+            {
+                for (int x = 0; x < texture.width; x++)
+                {
+                    float distance = Vector2.Distance(new Vector2(x, y), new Vector2(radius, radius));
+                    if (distance <= radius && distance >= radius - thickness)
+                        colors[y * texture.width + x] = Color.white;
+                    else
+                        colors[y * texture.width + x] = Color.clear;
+                }
+            }
+            texture.SetPixels(colors);
+            texture.Apply();
+            cachedRingSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
+            return cachedRingSprite;
+        }
+
+        private void CreateHighlightForTarget(Combatant target)
+        {
+            if (defaultHighlightPrefab != null)
+            {
+                target.TargetHighlight = Instantiate(defaultHighlightPrefab, target.transform);
+            }
+            else
+            {
+                GameObject canvasObj = new GameObject("DynamicTargetCanvas");
+                canvasObj.transform.SetParent(target.transform);
+                canvasObj.transform.localPosition = Vector3.down * 0.2f;
+                var canvas = canvasObj.AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.WorldSpace;
+                canvas.sortingLayerName = "UI"; // Or whatever is above sprites
+                canvas.sortingOrder = 50;
+                canvasObj.AddComponent<CanvasScaler>();
+                
+                var rt = canvasObj.GetComponent<RectTransform>();
+                rt.sizeDelta = new Vector2(1.5f, 0.5f); // Flatten it for perspective
+
+                // Background Ring (Dim)
+                GameObject bgObj = new GameObject("Background");
+                bgObj.transform.SetParent(canvasObj.transform, false);
+                var bgImg = bgObj.AddComponent<Image>();
+                bgImg.sprite = GetRingSprite();
+                bgImg.color = new Color(0, 0, 0, 0.5f);
+                var bgRT = bgObj.GetComponent<RectTransform>();
+                bgRT.anchorMin = Vector2.zero;
+                bgRT.anchorMax = Vector2.one;
+                bgRT.sizeDelta = Vector2.zero;
+
+                // Fill Ring (Gold)
+                GameObject fillObj = new GameObject("Fill");
+                fillObj.transform.SetParent(canvasObj.transform, false);
+                var fillImg = fillObj.AddComponent<Image>();
+                fillImg.sprite = GetRingSprite();
+                fillImg.type = Image.Type.Filled;
+                fillImg.fillMethod = Image.FillMethod.Radial360;
+                fillImg.fillOrigin = 2; // Top
+                fillImg.fillClockwise = true;
+                fillImg.color = new Color(1f, 0.8f, 0.1f, 0.8f);
+                var fillRT = fillObj.GetComponent<RectTransform>();
+                fillRT.anchorMin = Vector2.zero;
+                fillRT.anchorMax = Vector2.one;
+                fillRT.sizeDelta = Vector2.zero;
+
+                target.TargetHighlight = canvasObj;
+            }
+        }
+
         public void Hide()
         {
             isSelecting = false;
-            validTargets = null;
-            onTargetSelectedCallback = null;
-            onCancelledCallback = null;
+            
             if (selectionPanel != null) selectionPanel.SetActive(false);
             if (cancelButton != null) cancelButton.gameObject.SetActive(false);
             if (tooltipText != null) tooltipText.gameObject.SetActive(false);
 
-            if (activeHighlightObj != null)
+            if (validTargets != null)
             {
-                activeHighlightObj.transform.DOKill();
-                activeHighlightObj.SetActive(false);
+                foreach (var target in validTargets)
+                {
+                    if (target != null && target.TargetHighlight != null)
+                    {
+                        target.TargetHighlight.transform.DOKill();
+                        target.TargetHighlight.SetActive(false);
+                    }
+                }
             }
+            
+            validTargets = null;
+            onTargetSelectedCallback = null;
+            onCancelledCallback = null;
 
             // Restore Camera Zoom
             if (mainCamera != null)
@@ -113,42 +219,19 @@ namespace PixelMindscape.UI
 
             var target = validTargets[index];
 
-            // Setup TargetHighlight
-            if (activeHighlightObj != null)
-            {
-                activeHighlightObj.transform.DOKill();
-                activeHighlightObj.SetActive(false);
-            }
-
             if (target.TargetHighlight == null)
             {
-                // Dynamically create a spinning triangle / pulsating ring highlight if none assigned
-                if (defaultHighlightPrefab != null)
+                CreateHighlightForTarget(target);
+                target.TargetHighlight.SetActive(true);
+                target.TargetHighlight.transform.DOKill();
+                target.TargetHighlight.transform.localScale = Vector3.one * 1.2f;
+                target.TargetHighlight.transform.DOScale(Vector3.one * 1.6f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+                var fillImg = target.TargetHighlight.transform.Find("Fill")?.GetComponent<Image>();
+                if (fillImg != null)
                 {
-                    target.TargetHighlight = Instantiate(defaultHighlightPrefab, target.transform);
+                    fillImg.color = new Color(1f, 0.8f, 0.1f, 0.8f);
+                    fillImg.fillAmount = target.MaxHP > 0 ? (float)target.CurrentHP / target.MaxHP : 1f;
                 }
-                else
-                {
-                    // Create a beautiful default visual
-                    GameObject ring = new GameObject("DynamicTargetHighlight");
-                    ring.transform.SetParent(target.transform);
-                    ring.transform.localPosition = Vector3.down * 0.2f;
-                    var sr = ring.AddComponent<SpriteRenderer>();
-                    sr.color = new Color(1f, 0.8f, 0.1f, 0.8f); // Gold / Yellow
-                    // Create a simple placeholder square/circle sprite if available
-                    sr.sprite = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 1f);
-                    ring.transform.localScale = new Vector3(1.5f, 0.5f, 1f);
-                    target.TargetHighlight = ring;
-                }
-            }
-
-            activeHighlightObj = target.TargetHighlight;
-            if (activeHighlightObj != null)
-            {
-                activeHighlightObj.SetActive(true);
-                activeHighlightObj.transform.DOKill();
-                activeHighlightObj.transform.localScale = Vector3.one * 1.2f;
-                activeHighlightObj.transform.DOScale(Vector3.one * 1.6f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
             }
 
             // Update Tooltip
@@ -164,7 +247,27 @@ namespace PixelMindscape.UI
                     }
                     if (weaknesses.Count > 0) weakInfo = string.Join(", ", weaknesses);
                 }
-                tooltipText.text = $"{target.gameObject.name} | Weak: {weakInfo}";
+
+                // Generate JRPG ASCII Health Bar
+                int hpPercent = target.MaxHP > 0 ? Mathf.RoundToInt(((float)target.CurrentHP / target.MaxHP) * 100f) : 0;
+                int totalBlocks = 10;
+                int filledBlocks = target.MaxHP > 0 ? Mathf.RoundToInt(((float)target.CurrentHP / target.MaxHP) * totalBlocks) : 0;
+                string bar = new string('█', filledBlocks) + new string('░', totalBlocks - filledBlocks);
+
+                tooltipText.text = $"<b>{target.gameObject.name}</b>\n<color=#FF5555>HP: [{bar}] {hpPercent}%</color>\nWeak: {weakInfo}";
+
+                // Optionally, if tooltipText is in a Screen Space overlay, we can snap its position to the target!
+                if (mainCamera == null) mainCamera = Camera.main;
+                if (mainCamera != null)
+                {
+                    var rt = tooltipText.rectTransform;
+                    if (rt.parent != null && rt.parent.GetComponent<Canvas>() != null && rt.parent.GetComponent<Canvas>().renderMode != RenderMode.WorldSpace)
+                    {
+                        // Snap the tooltip rect to the enemy's screen position
+                        Vector3 screenPos = mainCamera.WorldToScreenPoint(target.transform.position + Vector3.up * 1.5f);
+                        rt.position = screenPos;
+                    }
+                }
             }
         }
 

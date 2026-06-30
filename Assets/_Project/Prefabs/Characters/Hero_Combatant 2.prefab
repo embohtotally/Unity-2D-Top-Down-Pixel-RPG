@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 873182360506923364}
   - component: {fileID: 37079035200884815}
   m_Layer: 0
-  m_Name: Hero_Combatant
+  m_Name: Hero_Combatant 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,37 +45,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07a54fa15ad12c408b7f8780db3f83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TurnPortrait: {fileID: 7155605520769666608, guid: c863dabf6d00f3541b7529f3fc251c67, type: 3}
+  TurnPortrait: {fileID: 4820088454609170442, guid: 4dad46daf8c9b2946a8aaa77d2f9a23f, type: 3}
   IsPlayerSide: 1
   IsProtagonist: 1
-  <EffectiveAgility>k__BackingField: 88
+  <EffectiveAgility>k__BackingField: 54
   <IsDown>k__BackingField: 0
   <IsDefeated>k__BackingField: 0
   Personality: 0
-  <CurrentHP>k__BackingField: 70
-  <MaxHP>k__BackingField: 100
-  <CurrentSP>k__BackingField: 44
-  <MaxSP>k__BackingField: 50
-  <BaseAttackPower>k__BackingField: 180
+  <CurrentHP>k__BackingField: 5433
+  <MaxHP>k__BackingField: 31321
+  <CurrentSP>k__BackingField: 93
+  <MaxSP>k__BackingField: 116
+  <BaseAttackPower>k__BackingField: 154
   <IsGuarding>k__BackingField: 0
   <BatonPassMultiplier>k__BackingField: 1
-  characterData: {fileID: 11400000, guid: 730cd43e03c600442a6d476df56b575b, type: 2}
+  characterData: {fileID: 11400000, guid: f6ce61f49f3b8fd45a9fbf0bd0d67f39, type: 2}
   personaLoadout:
-  - {fileID: 11400000, guid: a41e4ecb787b12c46bbc5ac0cee229af, type: 2}
-  - {fileID: 11400000, guid: 002f34eb496160d4688b47dca01df945, type: 2}
-  - {fileID: 11400000, guid: 769e0e3d7e3364745a78bfd650c47970, type: 2}
+  - {fileID: 11400000, guid: 03fafd09e061c5848b59a7f2495ef6b9, type: 2}
+  - {fileID: 11400000, guid: ff28a3307613ef647a446dcbb0fd71d6, type: 2}
+  - {fileID: 11400000, guid: 9a290b8c9bd58ca46a1e0401af2607f1, type: 2}
   startingHP: 100
   startingSP: 50
   baseAttack: 15
   baseMagic: 15
   agility: 10
-  strongAgainst: 0
-  weakAgainst: 10
+  strongAgainst: 4
+  weakAgainst: 1
   persistAcrossScenes: 1
   availableSkills:
-  - {fileID: 11400000, guid: cc76f0e95cbee734a92b56a4c2a25d98, type: 2}
-  - {fileID: 11400000, guid: 3f20ad2753d4f514b96a3d97827ea8bf, type: 2}
-  - {fileID: 11400000, guid: 73d6eaee8f7f83a488b66b14205382cb, type: 2}
+  - {fileID: 11400000, guid: 6bbee20fb0fb5d84a9acddb54fd90952, type: 2}
+  - {fileID: 11400000, guid: 8e04f67ce51c48d4c906a625dff05471, type: 2}
+  - {fileID: 11400000, guid: a4d4be8bbf2091c4c82f42565ab7afeb, type: 2}
 --- !u!1 &6698538467492221469
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,7 +153,7 @@ SpriteRenderer:
   m_SortingLayerID: -888154293
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3787167818937043302, guid: 1cbaf3e60eec5284aa43bdf59c4d4735, type: 3}
+  m_Sprite: {fileID: -9183328356049858845, guid: 6607b1947371589448e0766f7980c428, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -172,7 +172,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6698538467492221469}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: f3313bf05cdbf3c45b48724c647f65fa, type: 2}
   m_CullingMode: 0
